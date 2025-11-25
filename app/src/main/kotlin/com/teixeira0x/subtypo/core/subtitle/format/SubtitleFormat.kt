@@ -9,11 +9,10 @@ abstract class SubtitleFormat(val name: String, val extension: String) {
 
     companion object {
         val allSubtitleFormats =
-            arrayOf<SubtitleFormat>(/* id = 0 */ LRCLyricsFormat(), /* id = 1 */ SubRipFormat())
+            arrayOf<SubtitleFormat>(LRCLyricsFormat(), SubRipFormat())
 
         fun of(id: Int): SubtitleFormat {
             return allSubtitleFormats[id]
-                ?: throw UnknownFormatException("The format with id `$id` was not found.")
         }
 
         fun of(extension: String): SubtitleFormat {

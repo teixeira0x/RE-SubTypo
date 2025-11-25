@@ -3,18 +3,27 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/menu_open_subtitle"
-        android:icon="@drawable/ic_import"
-        android:title="@string/subtitle_open_file" />
+        android:id="@+id/file"
+        android:title="FIle"
+        android:icon="@drawable/ic_file"
+        app:showAsAction="ifRoom">
+        <!-- "file" submenu -->
+        <menu>
+            <item
+                android:id="@+id/menu_open_subtitle"
+                android:icon="@drawable/ic_import"
+                android:title="@string/subtitle_open_file" />
 
-    <item
-        android:id="@+id/menu_save_subtitle"
-        android:icon="@drawable/ic_save"
-        android:title="@string/subtitle_save" />
-    <item
-        android:id="@+id/menu_save_as_subtitle"
-        android:icon="@drawable/ic_save_as"
-        android:title="@string/subtitle_save_as" />
+            <item
+                android:id="@+id/menu_save_subtitle"
+                android:icon="@drawable/ic_save"
+                android:title="@string/subtitle_save" />
+            <item
+                android:id="@+id/menu_save_as_subtitle"
+                android:icon="@drawable/ic_save_as"
+                android:title="@string/subtitle_save_as" />
+        </menu>
+    </item>
 
     <item
         android:id="@+id/menu_close"
