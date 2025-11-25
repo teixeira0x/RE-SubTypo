@@ -40,7 +40,6 @@ import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditIntent
 import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditUiEvent
 import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditUiState
 import com.teixeira0x.subtypo.ui.textedit.util.CueFieldType
-import com.teixeira0x.subtypo.ui.textedit.util.createTimeChip
 import com.teixeira0x.subtypo.ui.textedit.util.decreaseTime
 import com.teixeira0x.subtypo.ui.textedit.util.increaseTime
 import com.teixeira0x.subtypo.ui.textedit.viewmodel.CueEditViewModel
@@ -207,7 +206,9 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
     private fun configureUI() {
         configureListeners()
         configureTextWatchers()
-        configureChips()
+
+        binding.imgUpTime.setOnClickListener { onTimeShortcutClick(isIncrease = true) }
+        binding.imgDownTime.setOnClickListener { onTimeShortcutClick(isIncrease = false) }
     }
 
     private fun configureListeners() {
@@ -278,7 +279,18 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
                     title = R.string.remove,
                     message = R.string.subtitle_cue_remove_msg,
                 ) { _, _ ->
-                    // Remove cue logic
+                    val cues = cueListViewModel.subtitle.data.cues.toMutableList()
+                    cues.removeAt(cueIndex)
+
+                    cueListViewModel.doIntent(
+                        CueListIntent.LoadSubtitle(
+                            cueListViewModel.subtitle.copy(
+                                data = cueListViewModel.subtitle.data.copy(cues = cues)
+                            )
+                        )
+                    )
+
+                    dismiss()
                 }
                 true
             }
@@ -308,24 +320,7 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
         }
     }
 
-    private fun configureChips() {
-        val chipTimes = arrayOf(1, 5, 10, 15)
-
-        chipTimes.forEach { time ->
-            val chipDecrease =
-                createTimeChip(requireContext(), "-${time}") {
-                    onTimeChipClick(false, time.toLong())
-                }
-            val chipIncrease =
-                createTimeChip(requireContext(), "+${time}") {
-                    onTimeChipClick(true, time.toLong())
-                }
-            binding.chipGroupTime.addView(chipDecrease)
-            binding.chipGroupTime.addView(chipIncrease)
-        }
-    }
-
-    private fun onTimeChipClick(isIncrease: Boolean, millis: Long) {
+    private fun onTimeShortcutClick(isIncrease: Boolean) {
         val focusedField =
             when {
                 binding.tieStartTime.isFocused -> binding.tieStartTime
@@ -337,9 +332,9 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
             val savedSelection = selectionStart
             val updatedTime =
                 if (isIncrease) {
-                    text.toString().increaseTime(millis, viewModel.subtitleTimeFormat)
+                    text.toString().increaseTime(1000, viewModel.subtitleTimeFormat)
                 } else {
-                    text.toString().decreaseTime(millis, viewModel.subtitleTimeFormat)
+                    text.toString().decreaseTime(1000, viewModel.subtitleTimeFormat)
                 }
             setText(updatedTime)
             setSelection(savedSelection)

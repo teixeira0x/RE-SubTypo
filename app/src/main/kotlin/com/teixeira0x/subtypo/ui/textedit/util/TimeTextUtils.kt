@@ -39,12 +39,3 @@ fun String.decreaseTime(decreaseMillis: Long, timeFormat: String): String {
         millis.getFormattedTime(timeFormat)
     } else this
 }
-
-inline fun createTimeChip(context: Context, label: String, crossinline onClick: () -> Unit): Chip {
-    return Chip(context).apply {
-        text = label
-        isClickable = true
-        isCheckable = false
-        setOnClickListener { onClick() }
-    }
-}

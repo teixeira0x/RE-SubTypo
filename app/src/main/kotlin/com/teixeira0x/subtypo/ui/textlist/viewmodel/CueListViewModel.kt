@@ -55,8 +55,7 @@ constructor() : ViewModel() {
     private val _customUiEvent = MutableSharedFlow<CueListUiEvent>()
     val customUiEvent: SharedFlow<CueListUiEvent> = _customUiEvent.asSharedFlow()
 
-    private val subtitleLive =
-        MutableLiveData<Subtitle>(Subtitle("subtitle", SubtitleFormat.of(".srt")))
+    private val subtitleLive = MutableLiveData(Subtitle("subtitle", SubtitleFormat.of(".srt")))
     val subtitle: Subtitle
         get() = subtitleLive.value!!
 
