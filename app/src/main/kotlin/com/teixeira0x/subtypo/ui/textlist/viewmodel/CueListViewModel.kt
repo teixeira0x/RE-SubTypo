@@ -75,6 +75,8 @@ constructor() : ViewModel() {
         viewModelScope.launch {
             subtitleLive.value = intent.subtitle
             _cueListUiState.value = CueListUiState.Loaded(intent.subtitle.data.cues)
+
+            _customUiEvent.emit(CueListUiEvent.PlayerUpdateSubtitle(intent.subtitle))
         }
     }
 

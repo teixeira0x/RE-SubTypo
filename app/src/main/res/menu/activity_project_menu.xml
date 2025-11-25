@@ -8,8 +8,17 @@
         android:title="@string/subtitle_open_file" />
 
     <item
-        android:id="@+id/menu_close_project"
+        android:id="@+id/menu_save_subtitle"
+        android:icon="@drawable/ic_save"
+        android:title="@string/subtitle_save" />
+    <item
+        android:id="@+id/menu_save_as_subtitle"
+        android:icon="@drawable/ic_save_as"
+        android:title="@string/subtitle_save_as" />
+
+    <item
+        android:id="@+id/menu_close"
         android:icon="@drawable/ic_close"
-        android:title="@string/proj_close" />
+        android:title="@string/close_app" />
 
 </menu>

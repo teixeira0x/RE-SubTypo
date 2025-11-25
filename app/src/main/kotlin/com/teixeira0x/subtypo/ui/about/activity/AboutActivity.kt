@@ -13,7 +13,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class AboutActivity : BaseEdgeToEdgeActivity() {
 
     private var _binding: ActivityAboutBinding? = null
-
     override fun bindView(): View {
         return ActivityAboutBinding.inflate(layoutInflater).also { _binding = it }.root
     }

@@ -17,7 +17,6 @@ import androidx.lifecycle.lifecycleScope
 import com.teixeira0x.subtypo.R
 import com.teixeira0x.subtypo.core.subtitle.format.SubtitleFormat
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
-import com.teixeira0x.subtypo.core.subtitle.model.SubtitleData
 import com.teixeira0x.subtypo.core.ui.base.BaseEdgeToEdgeActivity
 import com.teixeira0x.subtypo.databinding.ActivityProjectBinding
 import com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment
@@ -85,11 +84,8 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_open_subtitle -> {
-                openSubtitleFileLauncher.launch("*/*")
-            }
-
-            R.id.menu_close_project -> finish()
+            R.id.menu_open_subtitle -> openSubtitleFileLauncher.launch("*/*")
+            R.id.menu_close -> finish()
         }
 
         return super.onOptionsItemSelected(item)

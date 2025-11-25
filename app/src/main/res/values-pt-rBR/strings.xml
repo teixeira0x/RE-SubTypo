@@ -87,45 +87,6 @@
   <string name="about_subtitle_privacy">Veja nossa política de privacidade.</string>
   <string name="about_title_libraries">Bibliotecas</string>
   <string name="about_subtitle_libraries">Veja as bibliotecas de código aberto que usamos no SubTypo.</string>
-  <!-- Update Checker -->
-  <string name="update_checker_check_failed">Não foi possível verificar se há atualizações.</string>
-  <string name="update_checker_downloaded">Atualização baixada.</string>
-  <string name="update_checker_complete_btn">Concluir atualização</string>
-  <!-- Project -->
-  <string name="projects">Projetos</string>
-  <string name="proj_no_projects">Sem projetos, clique \"+\" para criar projetos!</string>
-  <string name="proj_options_title">Opções de Projeto</string>
-  <string name="proj_new">Novo projeto</string>
-  <string name="proj_edit">Editar projeto</string>
-  <plurals name="proj_delete">
-    <item quantity="one">Excluir projeto</item>
-    <item quantity="other">Excluir projetos</item>
-  </plurals>
-  <plurals name="proj_delete_confirmation_msg">
-    <item quantity="one">Tem certeza que deseja excluir o projeto: %1$s?</item>
-    <item quantity="other">Tem certeza de que deseja excluir os seguintes projetos: %1$s?</item>
-  </plurals>
-  <plurals name="proj_deleting">
-    <item quantity="one">Excluindo projeto.</item>
-    <item quantity="other">Excluindo projetos.</item>
-  </plurals>
-  <plurals name="proj_deleted">
-    <item quantity="one">Projeto excluído!</item>
-    <item quantity="other">Projetos excluídos!</item>
-  </plurals>
-  <string name="proj_no_video">Nenhum vídeo foi selecionado para este projeto.</string>
-  <string name="proj_edit_create">Criar um projeto novo</string>
-  <string name="proj_edit_enter_name">Digite o nome do projeto</string>
-  <string name="proj_edit_video_remove">Remover o vídeo</string>
-  <string name="proj_edit_video_no_select">Nenhum vídeo foi selecionado.</string>
-  <string name="proj_edit_video_tap_to_select">Toque para selecionar um vídeo (opcional).</string>
-  <string name="proj_edit_error_name_required">O nome do projeto é obrigatório.</string>
-  <string name="proj_edit_success_create">Projeto criado com sucesso!</string>
-  <string name="proj_edit_success_update">Projeto atualizado com sucesso!</string>
-  <string name="proj_initializing">Inicializando projeto...</string>
-  <string name="proj_saving">Salvando projeto...</string>
-  <string name="proj_close">Fechar projeto</string>
-  <string name="proj_error_unable_to_load">Não foi possível carregar este projeto.</string>
   <!-- Subtitles -->
   <string name="subtitles">Legendas</string>
   <string name="subtitle_loading">Carregando legendas...</string>
@@ -136,13 +97,6 @@
   <string name="subtitle_share_save_file">Salvar arquivo de legenda</string>
   <string name="subtitle_share_save_file_success">Arquivo salvo com sucesso!</string>
   <string name="subtitle_share_save_file_failed">Falha ao salvar o arquivo.</string>
-  <string name="subtitle_import">Importar legenda</string>
-  <string name="subtitle_import_progress">Importando...</string>
-  <string name="subtitle_import_success">Legenda importada com sucesso!</string>
-  <string name="subtitle_import_failed">Importação de legenda falhou.</string>
-  <string name="subtitle_import_failed_unsupported_format">O formato \`%1$s\` não é suportado.</string>
-  <string name="subtitle_import_failed_invalid_file">O arquivo está vazio ou não existe.</string>
-  <string name="subtitle_import_parse_error">Legenda analisada com erros.</string>
   <string name="subtitle_diagnostic">Diagnóstico</string>
   <string name="subtitle_diagnostic_list_title">Lista de diagnósticos</string>
   <string name="subtitle_diagnostic_list_message">Diagnósticos são os erros ou avisos encontrados ao analisar o arquivo de legenda. Se algum texto estiver faltando na lista, é possível que seja devido a um erro no arquivo. Os diagnósticos de erro e aviso estão abaixo: </string>

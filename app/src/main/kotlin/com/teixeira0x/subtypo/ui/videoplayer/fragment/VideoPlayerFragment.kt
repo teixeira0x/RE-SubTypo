@@ -107,9 +107,22 @@ class VideoPlayerFragment : Fragment() {
             }.show(childFragmentManager, "VideoPickerSheetFragment")
         }
 
+        savedInstanceState?.let {
+            viewModel.loadVideo(it.getString("playerUri")!!)
+            viewModel.updatePlayerPosition(it.getLong("playerPosition"))
+        }
+
         configureSubtitleView()
     }
 
+
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+
+        outState.putString("playerUri", viewModel.videoUri)
+        outState.putLong("playerPosition", viewModel.playerPosition.value!!)
+
+    }
     override fun onStart() {
         super.onStart()
         initializePlayer()
@@ -149,10 +162,9 @@ class VideoPlayerFragment : Fragment() {
     }
 
     private fun updatePlayerVisibility(visible: Boolean) {
-        val isVisible = visible
-        binding.playerContainer.isVisible = isVisible
+        binding.playerContainer.isVisible = visible
         binding.imgPlayerVisibility.setImageResource(
-            if (isVisible) {
+            if (visible) {
                 R.drawable.ic_video_off
             } else {
                 R.drawable.ic_video

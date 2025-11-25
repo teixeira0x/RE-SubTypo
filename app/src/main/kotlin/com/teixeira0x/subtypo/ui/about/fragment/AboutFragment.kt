@@ -16,7 +16,7 @@ import com.teixeira0x.subtypo.databinding.FragmentAboutBinding
 import com.teixeira0x.subtypo.ui.about.adapter.CardItemListAdapter
 import com.teixeira0x.subtypo.ui.about.model.CardItem
 
-class AboutFragment : Fragment(), View.OnClickListener {
+class AboutFragment : Fragment() {
 
     private var _binding: FragmentAboutBinding? = null
     private val binding: FragmentAboutBinding
@@ -36,18 +36,6 @@ class AboutFragment : Fragment(), View.OnClickListener {
         super.onViewCreated(view, savedInstanceState)
 
         binding.tvAppVersion.setText(appVersion)
-        binding.imgSocialWebsite.setOnClickListener(this)
-        binding.imgSocialEmail.setOnClickListener(this)
-
-        TooltipCompat.setTooltipText(
-            binding.imgSocialWebsite,
-            getString(R.string.description_social_visit_website),
-        )
-
-        TooltipCompat.setTooltipText(
-            binding.imgSocialEmail,
-            getString(R.string.description_social_send_email),
-        )
 
         binding.rvContribution.layoutManager = LinearLayoutManager(requireContext())
         binding.rvContribution.adapter = CardItemListAdapter(getContributionCardItemList())
@@ -70,12 +58,6 @@ class AboutFragment : Fragment(), View.OnClickListener {
     private fun getMoreCardItemList(): List<CardItem> {
         return listOf(
             CardItem(
-                icon = R.drawable.ic_text_box_multiple,
-                title = getString(R.string.about_title_privacy),
-                subtitle = getString(R.string.about_subtitle_privacy),
-                action = { openUrl(Urls.APP_PRIVACY_URL) },
-            ),
-            CardItem(
                 icon = R.drawable.ic_license,
                 title = getString(R.string.about_title_libraries),
                 subtitle = getString(R.string.about_subtitle_libraries),
@@ -86,14 +68,6 @@ class AboutFragment : Fragment(), View.OnClickListener {
             ),
         )
     }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            binding.imgSocialWebsite.id -> openUrl(Urls.APP_WEBSITE_URL)
-            binding.imgSocialEmail.id -> openUrl("mailto:${Urls.APP_EMAIL}")
-        }
-    }
-
     private fun openUrl(url: String) {
         MaterialAlertDialogBuilder(requireContext()).apply {
             setMessage(getString(R.string.open_url_info_msg, url))
