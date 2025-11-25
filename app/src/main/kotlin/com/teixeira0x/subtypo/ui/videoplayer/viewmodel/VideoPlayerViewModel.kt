@@ -21,21 +21,25 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.ui.videoplayer.model.ExoCuesTimed
+import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
 import com.teixeira0x.subtypo.ui.videoplayer.util.SubtitleUtils
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class VideoPlayerViewModel : ViewModel() {
-
     private val _customUiEvent = MutableSharedFlow<VideoPlayerUiEvent>()
+
     val customUiEvent: SharedFlow<VideoPlayerUiEvent> = _customUiEvent.asSharedFlow()
 
-    private val _playerPosition = MutableLiveData(0L)
-    val playerPosition: LiveData<Long> = _playerPosition
+    private val _videoPath = MutableLiveData<String>("")
 
-    var videoUri: String = ""
-        private set
+    val videoPath: LiveData<String>
+        get() = _videoPath
+
+    private val _playerPosition = MutableLiveData(0L)
+    val playerPosition: LiveData<Long>
+        get() = _playerPosition
 
     var subtitle: Subtitle? = null
         private set
@@ -46,13 +50,20 @@ class VideoPlayerViewModel : ViewModel() {
     var isPlayerVisible: Boolean = true
         private set
 
-    fun doEvent(event: VideoPlayerUiEvent) {
-        viewModelScope.launch { _customUiEvent.emit(event) }
+    fun doEvent(event: VideoPlayerIntent) {
+        viewModelScope.launch {
+            when (event) {
+                is VideoPlayerIntent.LoadVideoUri -> loadVideo(event.videoUri)
+                is VideoPlayerIntent.SeekTo -> _customUiEvent.emit(VideoPlayerUiEvent.SeekTo(event.position))
+                is VideoPlayerIntent.Pause -> _customUiEvent.emit(VideoPlayerUiEvent.Pause)
+                is VideoPlayerIntent.Play -> _customUiEvent.emit(VideoPlayerUiEvent.Play)
+            }
+        }
     }
 
-    fun loadVideo(videoUri: String) {
+    private fun loadVideo(videoUri: String) {
         viewModelScope.launch {
-            this@VideoPlayerViewModel.videoUri = videoUri
+            _videoPath.postValue(videoUri)
             _customUiEvent.emit(VideoPlayerUiEvent.LoadUri(videoUri))
         }
     }

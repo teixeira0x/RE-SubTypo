@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.CaptioningManager
 import android.widget.SeekBar
+import androidx.annotation.OptIn
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
@@ -25,6 +26,7 @@ import androidx.media3.common.Player.EVENT_PLAY_WHEN_READY_CHANGED
 import androidx.media3.common.Player.EVENT_POSITION_DISCONTINUITY
 import androidx.media3.common.Player.EVENT_TIMELINE_CHANGED
 import androidx.media3.common.Player.Events
+import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.CaptionStyleCompat
 import com.blankj.utilcode.util.ClipboardUtils
@@ -33,6 +35,7 @@ import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getFormattedTime
 import com.teixeira0x.subtypo.core.ui.permission.StoragePermissions
 import com.teixeira0x.subtypo.databinding.FragmentPlayerBinding
 import com.teixeira0x.subtypo.ui.videopicker.fragment.VideoPickerSheetFragment
+import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
 import com.teixeira0x.subtypo.ui.videoplayer.util.PlayerErrorMessageProvider
 import com.teixeira0x.subtypo.ui.videoplayer.viewmodel.VideoPlayerViewModel
@@ -41,13 +44,14 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import androidx.media3.common.text.Cue as ExoCue
 
+@OptIn(UnstableApi::class)
 @AndroidEntryPoint
 class VideoPlayerFragment : Fragment() {
 
     companion object {
         private const val LANDSCAPE_ASPECT_RATIO = 1.7770000f
         private const val DEFAULT_SEEK_BACK_MS = 5_000L
-        private const val DEFAULT_SEEK_FOWARD_MS = 5_000L
+        private const val DEFAULT_SEEK_FORWARD_MS = 5_000L
 
         private val PLAYBACK_SPEEDS = arrayOf<Float>(0.25f, 0.5f, 0.75f, 1f, 1.25f, 1.5f, 2f)
     }
@@ -100,29 +104,16 @@ class VideoPlayerFragment : Fragment() {
         binding.playerView.useController = false
         binding.playerView.setOnClickListener {
             // Choose video
-            VideoPickerSheetFragment.newSingleChoice { video ->
-                storagePermReq?.requestPermissions {
-                    viewModel.doEvent(VideoPlayerUiEvent.LoadUri(video.path))
-                }
-            }.show(childFragmentManager, "VideoPickerSheetFragment")
-        }
-
-        savedInstanceState?.let {
-            viewModel.loadVideo(it.getString("playerUri")!!)
-            viewModel.updatePlayerPosition(it.getLong("playerPosition"))
+            storagePermReq?.requestPermissions {
+                VideoPickerSheetFragment.newSingleChoice { video ->
+                    viewModel.doEvent(VideoPlayerIntent.LoadVideoUri(video.path))
+                }.show(childFragmentManager, "VideoPickerSheetFragment")
+            }
         }
 
         configureSubtitleView()
     }
 
-
-    override fun onSaveInstanceState(outState: Bundle) {
-        super.onSaveInstanceState(outState)
-
-        outState.putString("playerUri", viewModel.videoUri)
-        outState.putLong("playerPosition", viewModel.playerPosition.value!!)
-
-    }
     override fun onStart() {
         super.onStart()
         initializePlayer()
@@ -152,6 +143,7 @@ class VideoPlayerFragment : Fragment() {
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
+
     private fun configureSubtitleView() {
         val captioningManager =
             requireContext().getSystemService(Context.CAPTIONING_SERVICE) as CaptioningManager
@@ -178,14 +170,14 @@ class VideoPlayerFragment : Fragment() {
             _binding?.playerView?.player =
                 ExoPlayer.Builder(requireContext())
                     .setSeekBackIncrementMs(DEFAULT_SEEK_BACK_MS)
-                    .setSeekForwardIncrementMs(DEFAULT_SEEK_FOWARD_MS)
+                    .setSeekForwardIncrementMs(DEFAULT_SEEK_FORWARD_MS)
                     .build()
                     .also { player = it }
 
             player?.addListener(componentListener!!)
         }
 
-        prepareMedia(viewModel.videoUri)
+        prepareMedia(viewModel.videoPath.value!!)
     }
 
     private fun releasePlayer() {

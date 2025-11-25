@@ -25,6 +25,7 @@ import com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiEvent
 import com.teixeira0x.subtypo.ui.textlist.viewmodel.CueListViewModel
+import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
 import com.teixeira0x.subtypo.ui.videoplayer.viewmodel.VideoPlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -125,10 +126,10 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
                 when (event) {
                     is CueListUiEvent.PlayerUpdateSubtitle -> videoPlayerViewModel.setSubtitle(event.subtitle)
 
-                    is CueListUiEvent.PlayerPause -> videoPlayerViewModel.doEvent(VideoPlayerUiEvent.Pause)
+                    is CueListUiEvent.PlayerPause -> videoPlayerViewModel.doEvent(VideoPlayerIntent.Pause)
 
                     is CueListUiEvent.PlayerSeekTo -> videoPlayerViewModel.doEvent(
-                        VideoPlayerUiEvent.SeekTo(event.position)
+                        VideoPlayerIntent.SeekTo(event.position)
                     )
 
                     else -> Unit
