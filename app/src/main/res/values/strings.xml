@@ -152,4 +152,5 @@
     <string name="cue_list_sort_by_time">Sort text by time</string>
     <string name="cue_time_shortcuts">Time shortcuts</string>
     <string name="cue_remove">Remove text</string>
+    <string name="file">File</string>
 </resources>

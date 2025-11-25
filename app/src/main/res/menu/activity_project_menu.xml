@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/file"
-        android:title="FIle"
-        android:icon="@drawable/ic_file"
+        android:title="@string/file"
+        android:icon="@drawable/ic_folder"
         app:showAsAction="ifRoom">
         <!-- "file" submenu -->
         <menu>
