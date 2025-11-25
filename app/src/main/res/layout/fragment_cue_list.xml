@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rv_cues"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="?attr/actionBarSize"
+    android:clipToPadding="false" />
+
+  <com.google.android.material.progressindicator.CircularProgressIndicator
+    android:id="@+id/progress_indicator"
+    android:layout_height="wrap_content"
+    android:layout_width="wrap_content"
+    android:layout_marginTop="70dp"
+    android:layout_gravity="center_horizontal"
+    android:indeterminate="true" />
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/tv_cues_empty"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="70dp"
+    android:layout_gravity="center_horizontal"
+    android:gravity="center"
+    android:text="@string/subtitle_cue_list_empty" />
+
+  <com.google.android.material.bottomappbar.BottomAppBar
+    android:id="@+id/bottom_app_bar"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="bottom"
+    style="@style/Widget.SubTypo.BottomAppBar"
+    app:navigationIcon="@drawable/ic_sort_clock"
+    app:navigationContentDescription="@string/cue_list_sort_by_time"
+    app:fabCradleMargin="10dp"
+    app:fabAlignmentMode="center"
+    app:fabCradleRoundedCornerRadius="20dp"
+    app:fabCradleVerticalOffset="10dp" />
+
+  <com.google.android.material.floatingactionbutton.FloatingActionButton
+    android:id="@+id/fab_add_cue"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:contentDescription="@string/subtitle_cue_add"
+    app:layout_anchor="@id/bottom_app_bar"
+    app:srcCompat="@drawable/ic_plus" />
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

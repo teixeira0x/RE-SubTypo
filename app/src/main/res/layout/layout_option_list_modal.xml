@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_width="match_parent"
+  android:layout_height="match_parent">
+
+  <com.google.android.material.bottomsheet.BottomSheetDragHandleView
+    android:id="@+id/drag_handle"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" />
+
+  <com.google.android.material.textview.MaterialTextView
+    android:id="@+id/tv_title"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_below="@id/drag_handle"
+    android:visibility="gone"
+    android:textSize="18sp"
+    android:paddingVertical="@dimen/padding_small"
+    android:paddingHorizontal="@dimen/sheet_dialog_padding"
+    android:textAppearance="?attr/textAppearanceTitleLarge" />
+
+  <androidx.recyclerview.widget.RecyclerView
+    android:id="@+id/rv_options"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingBottom="@dimen/padding_small"
+    android:layout_below="@id/tv_title" />
+
+</RelativeLayout>

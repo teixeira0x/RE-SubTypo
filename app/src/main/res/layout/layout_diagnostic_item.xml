@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent"
+  android:paddingHorizontal="?attr/dialogPreferredPadding"
+  android:paddingVertical="@dimen/padding_medium"
+  android:foreground="@drawable/ripple_effect">
+
+  <ImageView
+    android:layout_height="30dp"
+    android:layout_width="30dp"
+    android:scaleType="fitCenter"
+    android:contentDescription="@null"
+    android:tint="?attr/colorPrimary"
+    android:src="@drawable/ic_information_outline"
+    android:padding="@dimen/padding_small"
+    android:id="@+id/img_icon" />
+
+  <TextView
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_toEndOf="@id/img_icon"
+    android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+    android:ellipsize="end"
+    android:textSize="16sp"
+    android:layout_marginLeft="@dimen/margin_small"
+    android:singleLine="true"
+    android:id="@+id/tv_title" />
+
+  <TextView
+    android:layout_height="wrap_content"
+    android:layout_width="match_parent"
+    android:layout_toEndOf="@id/img_icon"
+    android:layout_below="@id/tv_title"
+    android:ellipsize="end"
+    android:textSize="14sp"
+    android:layout_marginLeft="@dimen/margin_small"
+    android:id="@+id/tv_detail" />
+
+</RelativeLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="app_ad_id" translatable="false">ca-app-pub-8881633816424585~5354118357</string>
+  <string name="app_ad_banner" translatable="false">ca-app-pub-8881633816424585/6619173847</string>
+  <string name="app_ad_interstitial" translatable="false">ca-app-pub-8881633816424585/2236466890</string>
+</resources>

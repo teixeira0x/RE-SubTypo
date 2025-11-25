@@ -1,0 +1,68 @@
+[versions]
+
+lifecycle-version = "2.8.7"
+exoplayer-version = "1.4.1"
+androidx-recyclerview-selection = "1.1.0"
+google-material = "1.12.0"
+google-gson = "2.10.1"
+google-dagger-hilt = "2.53.1"
+google-ksp = "2.0.21-1.0.27"
+kotlin-coroutines = "1.8.1"
+util-aboutlibraries = "11.2.3"
+util-slf4j-api = "2.0.7"
+util-logback-android = "3.0.0"
+tests-junit = "4.13.2"
+
+android-plugin  = "8.13.1"
+kotlin-plugin = "2.0.21"
+
+[libraries]
+
+# Android
+android-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-plugin" }
+
+# AndroidX
+androidx-annotation = { module = "androidx.annotation:annotation", version = "1.8.2" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
+androidx-core = { module = "androidx.core:core", version = "1.13.1" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.13.1" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version = "1.8.5" }
+androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-version" }
+androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-version" }
+androidx-preference = { module = "androidx.preference:preference", version = "1.2.1" }
+androidx-exoplayer = { module = "androidx.media3:media3-exoplayer", version.ref = "exoplayer-version" }
+androidx-exoplayer-dash = { module = "androidx.media3:media3-exoplayer-dash", version.ref = "exoplayer-version" }
+androidx-exoplayer-ui = { module = "androidx.media3:media3-ui", version.ref = "exoplayer-version" }
+androidx-recyclerview-selection = { module = "androidx.recyclerview:recyclerview-selection", version.ref = "androidx-recyclerview-selection" }
+
+# Google
+google-material = { module = "com.google.android.material:material", version.ref = "google-material" }
+google-gson = { module = "com.google.code.gson:gson", version.ref = "google-gson" }
+google-hilt = { module = "com.google.dagger:hilt-android", version.ref = "google-dagger-hilt" }
+google-hilt-compiler = { module = "com.google.dagger:hilt-compiler", version.ref = "google-dagger-hilt" }
+google-ksp-gradle = { module = "com.google.devtools.ksp:com.google.devtools.ksp.gradle.plugin", version.ref = "google-ksp" }
+
+# Utils
+util-utilcode = { module = "com.blankj:utilcodex", version = "1.31.1" }
+util-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.14" }
+util-aboutlibraries = { module = "com.mikepenz:aboutlibraries", version.ref = "util-aboutlibraries" }
+util-aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "util-aboutlibraries" }
+util-glide = { module = "com.github.bumptech.glide:glide", version = "4.16.0" }
+util-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "util-slf4j-api" }
+util-logback-android = { module = "com.github.tony19:logback-android", version.ref = "util-logback-android" }
+
+# Kotlin
+kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
+kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
+kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlin-coroutines" }
+
+# Tests
+tests-junit = { module = "junit:junit", version.ref = "tests-junit" }
+
+[plugins]
+android-application = { id = "com.android.application", version.ref = "android-plugin" }
+android-library = { id = "com.android.library", version.ref = "android-plugin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin-plugin" }
+google-ksp = { id = "com.google.devtools.ksp", version.ref = "google-ksp" }
+google-dagger-hilt = { id = "com.google.dagger.hilt.android", version.ref = "google-dagger-hilt" }
+util-aboutlibraries = { id = "com.mikepenz.aboutlibraries.plugin", version.ref = "util-aboutlibraries" }

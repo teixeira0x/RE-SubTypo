@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+  xmlns:app="http://schemas.android.com/apk/res-auto"
+  android:layout_height="wrap_content"
+  android:layout_width="match_parent">
+
+  <androidx.constraintlayout.widget.ConstraintLayout
+    android:id="@+id/player_container"
+    android:layout_height="0dp"
+    android:layout_width="0dp"
+    app:layout_constraintDimensionRatio="16:9"
+    app:layout_constraintTop_toTopOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toTopOf="@id/rl_controller"
+    android:background="@color/black">
+
+    <androidx.media3.ui.PlayerView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      app:layout_constraintTop_toTopOf="parent"
+      app:layout_constraintStart_toStartOf="parent"
+      app:layout_constraintEnd_toEndOf="parent"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:surface_type="surface_view"
+      app:resize_mode="fit"
+      android:id="@+id/player_view" />
+  </androidx.constraintlayout.widget.ConstraintLayout>
+
+  <RelativeLayout
+    android:id="@+id/rl_controller"
+    android:layout_height="wrap_content"
+    android:layout_width="0dp"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintBottom_toBottomOf="parent"
+    android:padding="@dimen/player_controller_padding">
+
+    <LinearLayout
+      android:id="@+id/ll_timeline"
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      android:layout_marginBottom="@dimen/margin_small"
+      android:gravity="center_vertical">
+
+      <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:id="@+id/tv_current_position" />
+
+      <SeekBar
+        android:layout_height="wrap_content"
+        android:layout_width="0dp"
+        android:layout_weight="1.0"
+        android:id="@+id/seek_bar" />
+
+      <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="14sp"
+        android:textColor="?attr/colorSecondaryVariant"
+        android:id="@+id/tv_duration" />
+    </LinearLayout>
+
+    <ImageView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_below="@id/ll_timeline"
+      android:padding="@dimen/padding_small"
+      android:contentDescription="@string/description_player_visibility"
+      android:scaleType="fitCenter"
+      android:src="@drawable/ic_video_off"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:id="@+id/img_player_visibility" />
+
+    <ImageView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_below="@id/ll_timeline"
+      android:layout_toStartOf="@id/img_play"
+      android:padding="@dimen/padding_small"
+      android:contentDescription="@string/description_player_seek_backward"
+      android:scaleType="fitCenter"
+      android:src="@drawable/ic_skip_backward"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:id="@+id/img_skip_backward" />
+
+    <ImageView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_below="@id/ll_timeline"
+      android:layout_toEndOf="@id/img_play"
+      android:padding="@dimen/padding_small"
+      android:contentDescription="@string/description_player_seek_forward"
+      android:scaleType="fitCenter"
+      android:src="@drawable/ic_skip_forward"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:id="@+id/img_skip_forward" />
+
+    <ImageView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_below="@id/ll_timeline"
+      android:padding="@dimen/padding_small"
+      android:contentDescription="@string/description_player_play_or_pause"
+      android:scaleType="fitCenter"
+      android:src="@drawable/ic_play"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:layout_centerHorizontal="true"
+      android:id="@+id/img_play" />
+      
+    <ImageView
+      android:layout_height="wrap_content"
+      android:layout_width="wrap_content"
+      android:layout_below="@id/ll_timeline"
+      android:layout_alignParentEnd="true"
+      android:padding="@dimen/padding_small"
+      android:contentDescription="@string/description_player_playback_speed"
+      android:scaleType="fitCenter"
+      android:src="@drawable/ic_speedometer"
+      android:background="?attr/selectableItemBackgroundBorderless"
+      android:id="@+id/img_playback_speed" />
+  </RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
