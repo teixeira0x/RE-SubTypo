@@ -1,6 +1,7 @@
 package com.teixeira0x.subtypo.core.data.repository
 
 import android.content.Context
+import android.media.MediaMetadataRetriever
 import android.provider.MediaStore
 import androidx.core.net.toUri
 import com.teixeira0x.subtypo.core.media.model.Album
@@ -85,6 +86,7 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
                                             duration = cursor.getLong(durationIndex),
                                             albumName = cursor.getString(albumIndex),
                                             size = cursor.getString(sizeIndex),
+                                            corrupted = !isVideoValid(path),
                                             path = path,
                                             videoUri = file.toUri(),
                                         )
@@ -99,6 +101,26 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
                 emit(videoList)
             }
             .flowOn(Dispatchers.IO)
+
+
+    fun isVideoValid(path: String): Boolean {
+        return try {
+            val retriever = MediaMetadataRetriever()
+            retriever.setDataSource(path)
+            val duration = retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_DURATION
+            )?.toLongOrNull()
+            val mime = retriever.extractMetadata(
+                MediaMetadataRetriever.METADATA_KEY_MIMETYPE
+            )
+
+            retriever.release()
+
+            duration != null && duration > 0 && mime?.startsWith("video/") == true
+        } catch (_: Exception) {
+            false
+        }
+    }
 
     override fun getAlbums() =
         flow<List<Album>> {

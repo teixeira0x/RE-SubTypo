@@ -1,7 +1,7 @@
 [versions]
 
 lifecycle-version = "2.8.7"
-exoplayer-version = "1.4.1"
+exoplayer-version = "1.8.0"
 androidx-recyclerview-selection = "1.1.0"
 google-material = "1.12.0"
 google-gson = "2.10.1"

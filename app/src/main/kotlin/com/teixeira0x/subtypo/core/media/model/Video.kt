@@ -9,6 +9,7 @@ data class Video(
     val duration: Long = 0,
     val albumName: String,
     val size: String,
+    val corrupted: Boolean = false,
     val path: String,
     val videoUri: Uri,
 )

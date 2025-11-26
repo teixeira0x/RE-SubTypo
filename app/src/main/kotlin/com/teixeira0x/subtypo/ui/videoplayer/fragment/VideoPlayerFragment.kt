@@ -30,6 +30,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.ui.CaptionStyleCompat
 import com.blankj.utilcode.util.ClipboardUtils
+import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.teixeira0x.subtypo.R
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getFormattedTime
 import com.teixeira0x.subtypo.core.ui.permission.StoragePermissions
@@ -106,6 +107,13 @@ class VideoPlayerFragment : Fragment() {
             // Choose video
             storagePermReq?.requestPermissions {
                 VideoPickerSheetFragment.newSingleChoice { video ->
+                    if (video.corrupted) {
+                        MaterialAlertDialogBuilder(requireContext())
+                            .setMessage("SubTypo cannot decode this video file.")
+                            .setPositiveButton(R.string.ok) { _, _ -> }
+                            .show()
+                        return@newSingleChoice
+                    }
                     viewModel.doEvent(VideoPlayerIntent.LoadVideoUri(video.path))
                 }.show(childFragmentManager, "VideoPickerSheetFragment")
             }
