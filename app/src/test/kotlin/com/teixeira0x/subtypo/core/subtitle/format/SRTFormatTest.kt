@@ -7,9 +7,9 @@ import com.teixeira0x.subtypo.core.subtitle.model.SubtitleParseResult
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class LRCLyricsFormatTest {
+class SRTFormatTest {
 
-    private val lrcFormat = LRCLyricsFormat()
+    private val srtFormat = SubRipFormat()
 
     @Test
     fun `test toText with Cue list`() {
@@ -33,32 +33,49 @@ class LRCLyricsFormatTest {
             )
 
         val text =
-            lrcFormat.toText(
+            srtFormat.toText(
                 Subtitle(name = "Test", data = SubtitleData(cues = cues))
             )
 
         assertEquals(
             """
-      [00:10.00] First line
-      [00:20.00] Second line
-      [00:30.00] Third line
+      1
+      00:00:10,000 --> 00:00:20,000
+      First line
+      
+      2
+      00:00:20,000 --> 00:00:30,000
+      Second line
+
+      3
+      00:00:30,000 --> 00:00:40,000
+      Third line
       """
                 .trimIndent(),
             text,
         )
     }
 
+
     @Test
     fun `test parseText with valid LRC input`() {
         val input =
             """
-      [00:10.00] First line
-      [00:20.00] Second line
-      [00:30.00] Third line
+      1
+      00:00:10,000 --> 00:00:20,000
+      First line
+      
+      2
+      00:00:20,000 --> 00:00:30,000
+      Second line
+
+      3
+      00:00:30,000 --> 00:00:31,000
+      Third line
         """
                 .trimIndent()
 
-        val result: SubtitleParseResult = lrcFormat.parseText(input)
+        val result: SubtitleParseResult = srtFormat.parseText(input)
         val cues = result.data.cues
         val diagnostics = result.diagnostics
 
@@ -79,15 +96,27 @@ class LRCLyricsFormatTest {
     fun `test parseText with empty lines`() {
         val input =
             """
-      [00:10.00] First line
+      1
+      00:00:10,000 --> 00:00:30,000
+      First line
 
-      [00:30.00] Second line
+      
+      
+      
+      2
+      00:00:30,000 --> 00:00:40,000
+      Second line
 
-      [00:40.00] Third line
+
+
+
+      3
+      00:00:40,000 --> 00:00:41,000
+      Third line
         """
                 .trimIndent()
 
-        val result: SubtitleParseResult = lrcFormat.parseText(input)
+        val result: SubtitleParseResult = srtFormat.parseText(input)
         val cues = result.data.cues
         val diagnostics = result.diagnostics
 
@@ -108,13 +137,21 @@ class LRCLyricsFormatTest {
     fun `test parseText with invalid times`() {
         val input =
             """
-      [00:10.00] First line
-      [invalid] Invalid line
-      [00:30.00] Third line
+      1
+      00:00:10,000 --> 00:00:30,000
+      First line
+      
+      2
+      00:00:20000 --> 00:00:20,000
+      Erroorrrr line
+
+      3
+      00:00:30,000 --> 00:00:31,000
+      Third line
         """
                 .trimIndent()
 
-        val result: SubtitleParseResult = lrcFormat.parseText(input)
+        val result: SubtitleParseResult = srtFormat.parseText(input)
         val cues = result.data.cues
         val diagnostics = result.diagnostics
 
@@ -127,4 +164,5 @@ class LRCLyricsFormatTest {
         assertEquals(30000L, cues[1].startTime) // 00:30.00 -> 30000ms
         assertEquals(31000L, cues[1].endTime) // 00:31.00 -> 31000ms
     }
+
 }
