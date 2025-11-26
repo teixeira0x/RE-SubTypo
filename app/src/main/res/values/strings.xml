@@ -76,6 +76,7 @@
 
     <string name="pref_about_app">About SubTypo</string>
     <string name="pref_about_app_summary">Learn more about SubTypo</string>
+    <string name="video_player_corrupted_file">SubTypo cannot decode this video file.</string>
     <string name="video_picker_title">Select a video</string>
     <string name="video_picker_album_all">All</string>
     <string name="video_picker_error_no_videos">No videos found</string>

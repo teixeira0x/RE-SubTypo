@@ -1,5 +1,6 @@
 package com.teixeira0x.subtypo.ui.project.activity
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.OpenableColumns
@@ -21,12 +22,12 @@ import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.core.ui.base.BaseEdgeToEdgeActivity
 import com.teixeira0x.subtypo.core.ui.util.showToastLong
 import com.teixeira0x.subtypo.databinding.ActivityProjectBinding
+import com.teixeira0x.subtypo.ui.preference.SettingsActivity
 import com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiEvent
 import com.teixeira0x.subtypo.ui.textlist.viewmodel.CueListViewModel
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
-import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
 import com.teixeira0x.subtypo.ui.videoplayer.viewmodel.VideoPlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
@@ -99,6 +100,8 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
                 cueListViewModel.subtitle.name + cueListViewModel.subtitle.format.extension
             )
 
+            R.id.menu_settings -> startActivity(Intent(this, SettingsActivity::class.java))
+
             R.id.menu_close -> finish()
         }
 
@@ -123,17 +126,17 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
         }
 
         cueListViewModel.customUiEvent.flowWithLifecycle(lifecycle).onEach { event ->
-                when (event) {
-                    is CueListUiEvent.PlayerUpdateSubtitle -> videoPlayerViewModel.setSubtitle(event.subtitle)
+            when (event) {
+                is CueListUiEvent.PlayerUpdateSubtitle -> videoPlayerViewModel.setSubtitle(event.subtitle)
 
-                    is CueListUiEvent.PlayerPause -> videoPlayerViewModel.doEvent(VideoPlayerIntent.Pause)
+                is CueListUiEvent.PlayerPause -> videoPlayerViewModel.doEvent(VideoPlayerIntent.Pause)
 
-                    is CueListUiEvent.PlayerSeekTo -> videoPlayerViewModel.doEvent(
-                        VideoPlayerIntent.SeekTo(event.position)
-                    )
+                is CueListUiEvent.PlayerSeekTo -> videoPlayerViewModel.doEvent(
+                    VideoPlayerIntent.SeekTo(event.position)
+                )
 
-                    else -> Unit
-                }
+                else -> Unit
+            }
         }.launchIn(lifecycleScope)
     }
 

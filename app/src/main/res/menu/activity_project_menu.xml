@@ -26,6 +26,11 @@
     </item>
 
     <item
+        android:id="@+id/menu_settings"
+        android:icon="@drawable/ic_settings"
+        android:title="@string/settings" />
+
+    <item
         android:id="@+id/menu_close"
         android:icon="@drawable/ic_close"
         android:title="@string/close_app" />

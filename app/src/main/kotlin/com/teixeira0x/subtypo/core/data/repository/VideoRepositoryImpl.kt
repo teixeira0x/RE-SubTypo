@@ -8,12 +8,12 @@ import com.teixeira0x.subtypo.core.media.model.Album
 import com.teixeira0x.subtypo.core.media.model.Video
 import com.teixeira0x.subtypo.core.media.repository.VideoRepository
 import dagger.hilt.android.qualifiers.ApplicationContext
-import java.io.File
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
 import org.slf4j.LoggerFactory
+import java.io.File
+import javax.inject.Inject
 
 class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val appContext: Context) :
     VideoRepository {
@@ -39,71 +39,71 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
 
     override fun getVideos(albumId: String?) =
         flow<List<Video>> {
-                val videoList = mutableListOf<Video>()
+            val videoList = mutableListOf<Video>()
 
-                val selection =
-                    when {
-                        !albumId.isNullOrEmpty() -> "${MediaStore.Video.Media.BUCKET_ID} = ?"
-                        else -> null
-                    }
+            val selection =
+                when {
+                    !albumId.isNullOrEmpty() -> "${MediaStore.Video.Media.BUCKET_ID} = ?"
+                    else -> null
+                }
 
-                val selectionArgs =
-                    when {
-                        !albumId.isNullOrEmpty() -> arrayOf(albumId)
-                        else -> null
-                    }
+            val selectionArgs =
+                when {
+                    !albumId.isNullOrEmpty() -> arrayOf(albumId)
+                    else -> null
+                }
 
-                appContext.contentResolver
-                    .query(
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        VIDEO_PROJECTION,
-                        selection,
-                        selectionArgs,
-                        "${MediaStore.Video.Media.DATE_ADDED} DESC",
-                    )
-                    ?.use { cursor ->
-                        val idIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
-                        val titleIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)
-                        val displayNameIndex =
-                            cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
-                        val albumIndex =
-                            cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
-                        val sizeIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
-                        val pathIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
-                        val durationIndex =
-                            cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
+            appContext.contentResolver
+                .query(
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    VIDEO_PROJECTION,
+                    selection,
+                    selectionArgs,
+                    "${MediaStore.Video.Media.DATE_ADDED} DESC",
+                )
+                ?.use { cursor ->
+                    val idIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media._ID)
+                    val titleIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.TITLE)
+                    val displayNameIndex =
+                        cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DISPLAY_NAME)
+                    val albumIndex =
+                        cursor.getColumnIndexOrThrow(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
+                    val sizeIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.SIZE)
+                    val pathIndex = cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DATA)
+                    val durationIndex =
+                        cursor.getColumnIndexOrThrow(MediaStore.Video.Media.DURATION)
 
-                        while (cursor.moveToNext()) {
-                            try {
-                                val path = cursor.getString(pathIndex)
-                                val file = File(path)
-                                if (file.exists()) {
-                                    videoList.add(
-                                        Video(
-                                            title = cursor.getString(titleIndex),
-                                            displayName = cursor.getString(displayNameIndex),
-                                            id = cursor.getString(idIndex),
-                                            duration = cursor.getLong(durationIndex),
-                                            albumName = cursor.getString(albumIndex),
-                                            size = cursor.getString(sizeIndex),
-                                            corrupted = !isVideoValid(path),
-                                            path = path,
-                                            videoUri = file.toUri(),
-                                        )
+                    while (cursor.moveToNext()) {
+                        try {
+                            val path = cursor.getString(pathIndex)
+                            val file = File(path)
+                            if (file.exists()) {
+                                videoList.add(
+                                    Video(
+                                        title = cursor.getString(titleIndex),
+                                        displayName = cursor.getString(displayNameIndex),
+                                        id = cursor.getString(idIndex),
+                                        duration = cursor.getLong(durationIndex),
+                                        albumName = cursor.getString(albumIndex),
+                                        size = cursor.getString(sizeIndex),
+                                        corrupted = !isVideoValid(path),
+                                        path = path,
+                                        videoUri = file.toUri(),
                                     )
-                                }
-                            } catch (e: Exception) {
-                                log.error("Error processing video", e)
+                                )
                             }
+                        } catch (e: Exception) {
+                            log.error("Error processing video", e)
                         }
-                    } ?: log.warn("Cursor is null")
+                    }
+                } ?: log.warn("Cursor is null")
 
-                emit(videoList)
-            }
+            emit(videoList)
+        }
             .flowOn(Dispatchers.IO)
 
 
-    fun isVideoValid(path: String): Boolean {
+    private fun isVideoValid(path: String): Boolean {
         return try {
             val retriever = MediaMetadataRetriever()
             retriever.setDataSource(path)
@@ -124,38 +124,38 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
 
     override fun getAlbums() =
         flow<List<Album>> {
-                val albumList = mutableListOf<Album>()
-                val albumSet = mutableSetOf<String>()
+            val albumList = mutableListOf<Album>()
+            val albumSet = mutableSetOf<String>()
 
-                appContext.contentResolver
-                    .query(
-                        MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
-                        ALBUM_PROJECTION,
-                        null,
-                        null,
-                        null,
-                    )
-                    ?.use { cursor ->
-                        val albumIdIndex = cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_ID)
-                        val albumNameIndex =
-                            cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
+            appContext.contentResolver
+                .query(
+                    MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                    ALBUM_PROJECTION,
+                    null,
+                    null,
+                    null,
+                )
+                ?.use { cursor ->
+                    val albumIdIndex = cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_ID)
+                    val albumNameIndex =
+                        cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
 
-                        if (albumIdIndex == -1 || albumNameIndex == -1) {
-                            log.warn("Required columns not found in MediaStore")
-                            return@use
+                    if (albumIdIndex == -1 || albumNameIndex == -1) {
+                        log.warn("Required columns not found in MediaStore")
+                        return@use
+                    }
+
+                    while (cursor.moveToNext()) {
+                        val albumId = cursor.getString(albumIdIndex) ?: continue
+                        val albumName = cursor.getString(albumNameIndex) ?: "Unknown"
+
+                        if (albumSet.add(albumId)) {
+                            albumList.add(Album(id = albumId, name = albumName))
                         }
+                    }
+                } ?: log.warn("Cursor is null")
 
-                        while (cursor.moveToNext()) {
-                            val albumId = cursor.getString(albumIdIndex) ?: continue
-                            val albumName = cursor.getString(albumNameIndex) ?: "Unknown"
-
-                            if (albumSet.add(albumId)) {
-                                albumList.add(Album(id = albumId, name = albumName))
-                            }
-                        }
-                    } ?: log.warn("Cursor is null")
-
-                emit(albumList)
-            }
+            emit(albumList)
+        }
             .flowOn(Dispatchers.IO)
 }

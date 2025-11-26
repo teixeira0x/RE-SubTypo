@@ -50,7 +50,6 @@ import androidx.media3.common.text.Cue as ExoCue
 class VideoPlayerFragment : Fragment() {
 
     companion object {
-        private const val LANDSCAPE_ASPECT_RATIO = 1.7770000f
         private const val DEFAULT_SEEK_BACK_MS = 5_000L
         private const val DEFAULT_SEEK_FORWARD_MS = 5_000L
 
@@ -109,7 +108,7 @@ class VideoPlayerFragment : Fragment() {
                 VideoPickerSheetFragment.newSingleChoice { video ->
                     if (video.corrupted) {
                         MaterialAlertDialogBuilder(requireContext())
-                            .setMessage("SubTypo cannot decode this video file.")
+                            .setMessage(R.string.video_player_corrupted_file)
                             .setPositiveButton(R.string.ok) { _, _ -> }
                             .show()
                         return@newSingleChoice
@@ -119,6 +118,11 @@ class VideoPlayerFragment : Fragment() {
             }
         }
 
+
+    }
+
+    override fun onResume() {
+        super.onResume()
         configureSubtitleView()
     }
 
