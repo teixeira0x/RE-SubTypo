@@ -22,6 +22,8 @@ import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.core.ui.base.BaseEdgeToEdgeActivity
 import com.teixeira0x.subtypo.core.ui.util.showToastLong
 import com.teixeira0x.subtypo.databinding.ActivityProjectBinding
+import com.teixeira0x.subtypo.ui.optionlist.dialog.showOptionListDialog
+import com.teixeira0x.subtypo.ui.optionlist.model.OptionItem
 import com.teixeira0x.subtypo.ui.preference.SettingsActivity
 import com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
@@ -96,9 +98,36 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_open_subtitle -> openSubtitleFileLauncher.launch("*/*")
-            R.id.menu_save_subtitle, R.id.menu_save_as_subtitle -> saveSubtitleLauncher.launch(
+            R.id.menu_save_subtitle,
+            R.id.menu_save_as_subtitle -> saveSubtitleLauncher.launch(
                 cueListViewModel.subtitle.name + cueListViewModel.subtitle.format.extension
             )
+
+            R.id.menu_subtitle_format -> {
+                showOptionListDialog(
+                    this,
+                    getString(R.string.subtitle_select_format),
+                    listOf(
+                        OptionItem(
+                            R.drawable.ic_subtitle,
+                            "SubRip (.srt)"
+                        ),
+                        OptionItem(
+                            R.drawable.ic_subtitle,
+                            "LRC Lyrics (.lrc)"
+                        )
+                    )
+                ) { pos, item ->
+                    cueListViewModel.doIntent(
+                        CueListIntent.LoadSubtitle(
+                            cueListViewModel.subtitle.copy(
+                                format = SubtitleFormat.of(pos)
+                            )
+                        )
+                    )
+
+                }
+            }
 
             R.id.menu_settings -> startActivity(Intent(this, SettingsActivity::class.java))
 
@@ -218,8 +247,7 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
     }
 
     private fun writeFile(fileUri: Uri, content: String): Boolean {
-        val resolver = contentResolver
-        return resolver.openOutputStream(fileUri)?.bufferedWriter()?.use { writer ->
+        return contentResolver.openOutputStream(fileUri, "w")?.bufferedWriter()?.use { writer ->
             try {
                 writer.write(content)
                 true

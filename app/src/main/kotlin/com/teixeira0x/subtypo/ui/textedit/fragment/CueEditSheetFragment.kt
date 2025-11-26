@@ -332,9 +332,9 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
             val savedSelection = selectionStart
             val updatedTime =
                 if (isIncrease) {
-                    text.toString().increaseTime(1000, viewModel.subtitleTimeFormat)
+                    text.toString().increaseTime(100, viewModel.subtitleTimeFormat)
                 } else {
-                    text.toString().decreaseTime(1000, viewModel.subtitleTimeFormat)
+                    text.toString().decreaseTime(100, viewModel.subtitleTimeFormat)
                 }
             setText(updatedTime)
             setSelection(savedSelection)

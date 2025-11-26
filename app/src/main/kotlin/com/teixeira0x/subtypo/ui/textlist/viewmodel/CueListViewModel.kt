@@ -15,6 +15,7 @@
 
 package com.teixeira0x.subtypo.ui.textlist.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel

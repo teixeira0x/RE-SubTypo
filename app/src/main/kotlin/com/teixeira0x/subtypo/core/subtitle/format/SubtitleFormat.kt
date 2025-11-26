@@ -9,7 +9,7 @@ abstract class SubtitleFormat(val name: String, val extension: String) {
 
     companion object {
         val allSubtitleFormats =
-            arrayOf<SubtitleFormat>(LRCLyricsFormat(), SubRipFormat())
+            arrayOf<SubtitleFormat>(SubRipFormat(), LRCLyricsFormat())
 
         fun of(id: Int): SubtitleFormat {
             return allSubtitleFormats[id]

@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/file"
+        android:id="@+id/menu_file"
         android:title="@string/file"
         android:icon="@drawable/ic_folder"
         app:showAsAction="ifRoom">
@@ -25,6 +25,20 @@
         </menu>
     </item>
 
+    <item
+        android:id="@+id/menu_subtitle"
+        android:title="@string/subtitle"
+        android:icon="@drawable/ic_subtitle"
+        app:showAsAction="ifRoom">
+        <!-- "file" submenu -->
+        <menu>
+
+            <item
+                android:id="@+id/menu_subtitle_format"
+                android:title="@string/subtitle_format" />
+
+        </menu>
+    </item>
     <item
         android:id="@+id/menu_settings"
         android:icon="@drawable/ic_settings"
