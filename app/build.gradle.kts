@@ -96,7 +96,6 @@ dependencies {
     // Kotlin
     implementation(libs.kotlin.coroutines.core)
     implementation(libs.kotlin.coroutines.android)
-
     // Utils
     implementation(libs.util.utilcode)
     implementation(libs.util.aboutlibraries)
@@ -105,8 +104,6 @@ dependencies {
     implementation(libs.util.slf4j.api)
     implementation(libs.util.logback.android)
     debugImplementation(libs.util.leakcanary)
-
-    implementation("com.github.skydoves:colorpickerview:2.3.0")
 
     // Test
     testImplementation(libs.tests.junit)

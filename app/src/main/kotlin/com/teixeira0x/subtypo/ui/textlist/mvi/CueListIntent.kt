@@ -19,7 +19,8 @@ import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 
 sealed class CueListIntent {
 
-    data class LoadSubtitle(val subtitle: Subtitle) : CueListIntent()
+    data class LoadSubtitle(val subtitle: Subtitle, val updateSourceView: Boolean = true) :
+        CueListIntent()
 
     data class ScrollTo(val index: Int) : CueListIntent()
 

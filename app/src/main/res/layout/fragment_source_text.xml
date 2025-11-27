@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="?attr/colorSurface">
+
+    <EditText
+        android:id="@+id/editor"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="top|start"
+        android:hint="@string/subtitle_source"
+        android:inputType="textMultiLine|text"
+        android:scrollbars="vertical"
+        android:overScrollMode="always"
+        android:padding="16dp" />
+
+
+    <com.google.android.material.bottomappbar.BottomAppBar
+        android:id="@+id/bottom_app_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        style="@style/Widget.SubTypo.BottomAppBar"
+        app:navigationContentDescription="@string/cue_list_sort_by_time"
+        app:fabCradleMargin="10dp"
+        app:fabAlignmentMode="center"
+        app:fabCradleRoundedCornerRadius="20dp"
+        app:fabCradleVerticalOffset="10dp" />
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

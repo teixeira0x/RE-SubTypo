@@ -77,6 +77,10 @@ constructor() : ViewModel() {
             _cueListUiState.value = CueListUiState.Loaded(intent.subtitle.data.cues)
 
             _customUiEvent.emit(CueListUiEvent.PlayerUpdateSubtitle(intent.subtitle))
+
+            if (intent.updateSourceView) {
+                _customUiEvent.emit(CueListUiEvent.UpdateSourceView(intent.subtitle))
+            }
         }
     }
 

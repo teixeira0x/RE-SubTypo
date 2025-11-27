@@ -12,6 +12,7 @@ import androidx.activity.result.contract.ActivityResultContracts.CreateDocument
 import androidx.activity.viewModels
 import androidx.appcompat.view.menu.MenuBuilder
 import androidx.core.graphics.Insets
+import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.flowWithLifecycle
@@ -25,6 +26,9 @@ import com.teixeira0x.subtypo.databinding.ActivityProjectBinding
 import com.teixeira0x.subtypo.ui.optionlist.dialog.showOptionListDialog
 import com.teixeira0x.subtypo.ui.optionlist.model.OptionItem
 import com.teixeira0x.subtypo.ui.preference.SettingsActivity
+import com.teixeira0x.subtypo.ui.sourceview.fragment.SourceViewFragment
+import com.teixeira0x.subtypo.ui.sourceview.mvp.SourceViewIntent
+import com.teixeira0x.subtypo.ui.sourceview.viewmodel.SourceViewViewModel
 import com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiEvent
@@ -45,6 +49,8 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
 
     private val videoPlayerViewModel by viewModels<VideoPlayerViewModel>()
     private val cueListViewModel by viewModels<CueListViewModel>()
+
+    private val sourceTextViewModel by viewModels<SourceViewViewModel>()
 
     private val openSubtitleFileLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -129,6 +135,10 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
                 }
             }
 
+            R.id.menu_subtitle_go_to_source_view -> {
+                binding.fragmentSourceView.isVisible = !binding.fragmentSourceView.isVisible
+            }
+
             R.id.menu_settings -> startActivity(Intent(this, SettingsActivity::class.java))
 
             R.id.menu_close -> finish()
@@ -145,6 +155,7 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
             mainContent.updatePadding(left = insets.left)
 
             fragmentCueList.getFragment<CueListFragment>().onApplySystemBarInsets(insets)
+            fragmentSourceView.getFragment<SourceViewFragment>().onApplySystemBarInsets(insets)
         }
     }
 
@@ -158,7 +169,15 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
             when (event) {
                 is CueListUiEvent.PlayerUpdateSubtitle -> videoPlayerViewModel.setSubtitle(event.subtitle)
 
-                is CueListUiEvent.PlayerPause -> videoPlayerViewModel.doEvent(VideoPlayerIntent.Pause)
+                is CueListUiEvent.UpdateSourceView -> sourceTextViewModel.doIntent(
+                    SourceViewIntent.LoadSubtitle(
+                        event.subtitle
+                    )
+                )
+
+                is CueListUiEvent.PlayerPause -> videoPlayerViewModel.doEvent(
+                    VideoPlayerIntent.Pause
+                )
 
                 is CueListUiEvent.PlayerSeekTo -> videoPlayerViewModel.doEvent(
                     VideoPlayerIntent.SeekTo(event.position)

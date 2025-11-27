@@ -1,80 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
-  xmlns:app="http://schemas.android.com/apk/res-auto"
-  android:layout_width="match_parent"
-  android:layout_height="match_parent"
-  android:background="?attr/colorSurface">
-
-  <com.google.android.material.appbar.AppBarLayout
-    android:id="@+id/app_bar"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/shape_toolbar"
-    app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
-    app:elevation="@dimen/divider_size">
-
-    <com.google.android.material.appbar.MaterialToolbar
-      android:id="@+id/toolbar"
-      android:layout_width="match_parent"
-      android:layout_height="wrap_content" />
-
-  </com.google.android.material.appbar.AppBarLayout>
-
-  <androidx.constraintlayout.widget.ConstraintLayout
-    android:id="@+id/main_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior">
+    android:background="?attr/colorSurface">
 
-    <androidx.core.widget.NestedScrollView
-      android:id="@+id/nsv_start_container"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      app:layout_constraintStart_toStartOf="parent"
-      app:layout_constraintEnd_toStartOf="@id/divider"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintTop_toTopOf="parent">
-
-      <LinearLayout
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_toolbar"
+        app:elevation="@dimen/divider_size"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.appbar.AppBarLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main_content"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/nsv_start_container"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:orientation="vertical">
+
+                <androidx.fragment.app.FragmentContainerView
+                    android:id="@+id/fragment_player"
+                    android:name="com.teixeira0x.subtypo.ui.videoplayer.fragment.VideoPlayerFragment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+            </LinearLayout>
+        </androidx.core.widget.NestedScrollView>
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="@dimen/divider_size"
+            android:layout_height="0dp"
+            android:background="?attr/colorOutlineVariant"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/fragment_cue_list"
+            app:layout_constraintStart_toEndOf="@id/nsv_start_container"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
-          android:id="@+id/fragment_player"
-          android:layout_width="match_parent"
-          android:layout_height="wrap_content"
-          android:name="com.teixeira0x.subtypo.ui.videoplayer.fragment.VideoPlayerFragment" />
+            android:id="@+id/fragment_cue_list"
+            android:name="com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/divider"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <androidx.fragment.app.FragmentContainerView
-          android:id="@+id/fragment_subtitle_list"
-          android:layout_width="match_parent"
-          android:layout_height="match_parent"
-          android:name="com.teixeira0x.subtypo.ui.subtitlelist.fragment.SubtitleListFragment" />
+            android:id="@+id/fragment_source_view"
+            android:name="com.teixeira0x.subtypo.ui.sourceview.fragment.SourceViewFragment"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@id/divider"
+            app:layout_constraintTop_toTopOf="parent" />
 
-      </LinearLayout>
-    </androidx.core.widget.NestedScrollView>
-
-    <View
-      android:id="@+id/divider"
-      android:layout_width="@dimen/divider_size"
-      android:layout_height="0dp"
-      android:background="?attr/colorOutlineVariant"
-      app:layout_constraintStart_toEndOf="@id/nsv_start_container"
-      app:layout_constraintEnd_toStartOf="@id/fragment_cue_list"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
-    <androidx.fragment.app.FragmentContainerView
-      android:id="@+id/fragment_cue_list"
-      android:layout_width="0dp"
-      android:layout_height="0dp"
-      android:name="com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment"
-      app:layout_constraintStart_toEndOf="@id/divider"
-      app:layout_constraintEnd_toEndOf="parent"
-      app:layout_constraintBottom_toBottomOf="parent"
-      app:layout_constraintTop_toTopOf="parent" />
-
-  </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

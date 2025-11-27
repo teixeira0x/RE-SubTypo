@@ -37,6 +37,10 @@
                 android:id="@+id/menu_subtitle_format"
                 android:title="@string/subtitle_format" />
 
+            <item
+                android:id="@+id/menu_subtitle_go_to_source_view"
+                android:title="@string/subtitle_go_to_source_view" />
+
         </menu>
     </item>
     <item
