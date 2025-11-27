@@ -14,7 +14,6 @@
 - **Standalone Editing**: Work on subtitles without requiring a video.
 - **Import/Export**: Seamlessly import and export subtitle files.
 - **Subtitle Formats**: LRC, SRT.
-- **Translate Subtitle**: Automatically translate subtitles into other languages.
 - **Material You Design**: Customizable and visually appealing interface.
 
 ## 🤝 How to Contribute
