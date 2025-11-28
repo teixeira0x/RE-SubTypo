@@ -48,6 +48,8 @@ class SourceViewFragment : Fragment() {
 
         viewModel.sourceTextUiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { event ->
+                if (event.isFromUi) return@onEach
+
                 binding.editor.setText(event.text)
             }.launchIn(viewLifecycleOwner.lifecycleScope)
 

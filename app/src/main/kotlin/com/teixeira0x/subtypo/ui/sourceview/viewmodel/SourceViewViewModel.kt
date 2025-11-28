@@ -15,6 +15,7 @@ class SourceViewViewModel : ViewModel() {
     fun doIntent(intent: SourceViewIntent) {
         when (intent) {
             is SourceViewIntent.LoadSubtitle -> loadSubtitle(intent)
+            is SourceViewIntent.UpdateText -> updateText(intent)
         }
     }
 
@@ -22,7 +23,15 @@ class SourceViewViewModel : ViewModel() {
         _sourceTextUiState.value = _sourceTextUiState.value.copy(text = intent.subtitle.toText())
     }
 
+    private fun updateText(intent: SourceViewIntent.UpdateText) {
+        _sourceTextUiState.value = _sourceTextUiState.value.copy(
+            text = intent.text,
+            isFromUi = true
+        )
+    }
+
     data class SourceTextUiState(
-        val text: String = ""
+        val text: String = "",
+        val isFromUi: Boolean = false
     )
 }
