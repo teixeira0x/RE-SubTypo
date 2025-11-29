@@ -14,13 +14,12 @@ import androidx.preference.PreferenceFragmentCompat
 import com.google.android.material.color.DynamicColors
 import com.teixeira0x.subtypo.R
 import com.teixeira0x.subtypo.core.preference.PreferencesManager
-import com.teixeira0x.subtypo.core.ui.base.Selectable
 import com.teixeira0x.subtypo.core.ui.util.isDarkMode
-import com.teixeira0x.subtypo.ui.navigateToAboutActivity
+import com.teixeira0x.subtypo.ui.about.activity.AboutActivity
 import com.teixeira0x.subtypo.ui.preference.viewmodel.PreferencesViewModel
 
 class PreferencesFragment :
-    PreferenceFragmentCompat(), OnSharedPreferenceChangeListener, Selectable {
+    PreferenceFragmentCompat(), OnSharedPreferenceChangeListener {
 
     companion object {
         private const val RECREATE_ACTION_DELAY = 150L
@@ -83,7 +82,7 @@ class PreferencesFragment :
 
         findPreference<Preference>(PreferencesManager.KEY_ABOUT_APP)
             ?.setOnPreferenceClickListener {
-                navigateToAboutActivity(requireContext())
+                requireContext().startActivity(Intent(context, AboutActivity::class.java))
                 true
             }
     }
@@ -122,13 +121,5 @@ class PreferencesFragment :
                 handler.postDelayed(recreateAction, RECREATE_ACTION_DELAY)
             }
         }
-    }
-
-    override fun onSelect() {
-        onBackPressedCallback.isEnabled = viewModel.currentScreenId.value != R.xml.preferences
-    }
-
-    override fun onDeselect() {
-        onBackPressedCallback.isEnabled = false
     }
 }

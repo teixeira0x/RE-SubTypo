@@ -1,9 +1,11 @@
 package com.teixeira0x.subtypo.ui.editor.activity
 
+
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener
 import android.net.Uri
 import android.os.Bundle
-import android.provider.OpenableColumns
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -18,10 +20,15 @@ import androidx.core.view.updatePaddingRelative
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import com.teixeira0x.subtypo.R
+import com.teixeira0x.subtypo.core.preference.PreferencesManager
+import com.teixeira0x.subtypo.core.preference.PreferencesManager.KEY_APPEARANCE_AMOLED
 import com.teixeira0x.subtypo.core.subtitle.format.SubtitleFormat
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.core.ui.base.BaseEdgeToEdgeActivity
+import com.teixeira0x.subtypo.core.ui.util.getFileName
+import com.teixeira0x.subtypo.core.ui.util.readFile
 import com.teixeira0x.subtypo.core.ui.util.showToastLong
+import com.teixeira0x.subtypo.core.ui.util.writeFile
 import com.teixeira0x.subtypo.databinding.ActivityEditorBinding
 import com.teixeira0x.subtypo.ui.optionlist.dialog.showOptionListDialog
 import com.teixeira0x.subtypo.ui.optionlist.model.OptionItem
@@ -44,7 +51,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class EditorActivity : BaseEdgeToEdgeActivity() {
+class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListener {
     private val scope = CoroutineScope(Dispatchers.Main)
 
     private val videoPlayerViewModel by viewModels<VideoPlayerViewModel>()
@@ -77,6 +84,7 @@ class EditorActivity : BaseEdgeToEdgeActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setSupportActionBar(binding.toolbar)
+        PreferencesManager.registerOnSharedPreferenceChangeListener(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
 
@@ -85,6 +93,7 @@ class EditorActivity : BaseEdgeToEdgeActivity() {
 
     override fun onDestroy() {
         super.onDestroy()
+        PreferencesManager.registerOnSharedPreferenceChangeListener(this)
         _binding = null
     }
 
@@ -187,19 +196,9 @@ class EditorActivity : BaseEdgeToEdgeActivity() {
 
     private suspend fun readSubtitle(uri: Uri) {
         try {
-            val fileName = contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-                val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                if (cursor.moveToFirst() && nameIndex != -1) {
-                    cursor.getString(nameIndex)
-                } else null
-            } ?: uri.lastPathSegment
+            val fileName = getFileName(uri)
             val extension = fileName?.substringAfterLast('.', "")
-
-            val content = try {
-                contentResolver.openInputStream(uri)?.bufferedReader()?.readText()
-            } catch (e: Exception) {
-                null
-            }
+            val content = readFile(uri)
 
             if (fileName != null && extension != null && content != null && !content.isEmpty()) {
                 val (subtitleFormat, parseResult) = try {
@@ -229,12 +228,7 @@ class EditorActivity : BaseEdgeToEdgeActivity() {
             val success = writeFile(uri, content)
 
             if (success) {
-                val fileName = contentResolver.query(uri, null, null, null, null)?.use { cursor ->
-                    val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-                    if (cursor.moveToFirst() && nameIndex != -1) {
-                        cursor.getString(nameIndex)
-                    } else null
-                } ?: uri.lastPathSegment
+                val fileName = getFileName(uri)
 
                 if (fileName != null) {
                     cueListViewModel.doIntent(
@@ -245,7 +239,6 @@ class EditorActivity : BaseEdgeToEdgeActivity() {
                         )
                     )
                 }
-
             }
 
             withContext(Dispatchers.Main) {
@@ -256,20 +249,14 @@ class EditorActivity : BaseEdgeToEdgeActivity() {
                         R.string.subtitle_share_save_file_failed
                     }
                 )
-
             }
-
         }
     }
 
-    private fun writeFile(fileUri: Uri, content: String): Boolean {
-        return contentResolver.openOutputStream(fileUri, "w")?.bufferedWriter()?.use { writer ->
-            try {
-                writer.write(content)
-                true
-            } catch (e: Exception) {
-                false
-            }
-        } ?: false
+    override fun onSharedPreferenceChanged(
+        sharedPreferences: SharedPreferences?,
+        key: String?
+    ) {
+        if (key == KEY_APPEARANCE_AMOLED) recreate()
     }
 }

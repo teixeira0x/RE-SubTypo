@@ -17,19 +17,11 @@ package com.teixeira0x.subtypo.core.ui.util
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.net.Uri
+import android.provider.OpenableColumns
 import androidx.core.content.ContextCompat.checkSelfPermission
 import java.io.File
 import java.nio.charset.StandardCharsets
-
-fun Context.writeTempFile(name: String, content: String): File {
-    val file = File(this.filesDir, name)
-    if (file.exists()) {
-        file.delete()
-    }
-
-    file.writeText(content, StandardCharsets.UTF_8)
-    return file
-}
 
 fun Context.checkPermissions(permissions: Array<String>): Boolean {
     return permissions.all { perm ->
