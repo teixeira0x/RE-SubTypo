@@ -10,13 +10,12 @@ import android.view.ViewGroup
 import android.view.accessibility.CaptioningManager
 import android.widget.SeekBar
 import androidx.annotation.OptIn
-import androidx.appcompat.view.menu.MenuBuilder
-import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.EVENT_AVAILABLE_COMMANDS_CHANGED
@@ -35,6 +34,8 @@ import com.teixeira0x.subtypo.R
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getFormattedTime
 import com.teixeira0x.subtypo.core.ui.permission.StoragePermissions
 import com.teixeira0x.subtypo.databinding.FragmentPlayerBinding
+import com.teixeira0x.subtypo.ui.optionlist.dialog.showOptionListDialog
+import com.teixeira0x.subtypo.ui.optionlist.model.OptionItem
 import com.teixeira0x.subtypo.ui.videopicker.fragment.VideoPickerSheetFragment
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
@@ -248,36 +249,36 @@ class VideoPlayerFragment : Fragment() {
         val duration = player.duration
         val currentPosition = player.currentPosition
 
-        viewModel.updatePlayerPosition(currentPosition)
+        if (duration == C.TIME_UNSET) {
+            binding.tvDuration.text = "-:-"
+        } else {
+            binding.tvDuration.text = duration.getFormattedTime()
+        }
 
         binding.seekBar.setMax(duration.toInt())
-        binding.seekBar.setProgress(currentPosition.toInt())
+        binding.seekBar.progress = currentPosition.toInt()
         binding.seekBar.setOnSeekBarChangeListener(componentListener)
-        binding.tvDuration.text = duration.getFormattedTime()
+        viewModel.updatePlayerPosition(currentPosition)
     }
 
-    private fun showPlaybackSpeedPopup() {
-        PopupMenu(requireContext(), binding.imgPlaybackSpeed).apply {
-            if (menu is MenuBuilder) {
-                (menu as MenuBuilder).setOptionalIconsVisible(true)
-            }
+    private fun showPlaybackSpeedMenu() {
+        val playbackSpeedTexts =
+            resources.getStringArray(R.array.video_player_controls_playback_speeds)
 
-            val playbackSpeedTexts =
-                resources.getStringArray(R.array.video_player_controls_playback_speeds)
-            playbackSpeedTexts.forEachIndexed { index, text ->
-                val speed = PLAYBACK_SPEEDS[index]
-                val newItem = menu.add(0, index, 0, text)
+        val playbackSpeedOptions = playbackSpeedTexts.mapIndexed { index, text ->
+            val speed = PLAYBACK_SPEEDS[index]
+            OptionItem(
+                icon = if (player?.playbackParameters?.speed == speed) R.drawable.ic_check else R.drawable.ic_speedometer,
+                title = text
+            )
+        }
 
-                if (player?.playbackParameters?.speed == speed) {
-                    newItem.setIcon(R.drawable.ic_check)
-                }
-            }
-
-            setOnMenuItemClickListener { item ->
-                player?.setPlaybackSpeed(PLAYBACK_SPEEDS[item.itemId])
-                true
-            }
-            show()
+        showOptionListDialog(
+            requireContext(),
+            getString(R.string.player_playback_speed),
+            playbackSpeedOptions
+        ) { pos, item ->
+            player?.setPlaybackSpeed(PLAYBACK_SPEEDS[pos])
         }
     }
 
@@ -344,7 +345,7 @@ class VideoPlayerFragment : Fragment() {
                 binding.imgPlayerVisibility.id ->
                     viewModel.setPlayerVisibility(!viewModel.isPlayerVisible)
 
-                binding.imgPlaybackSpeed.id -> showPlaybackSpeedPopup()
+                binding.imgPlaybackSpeed.id -> showPlaybackSpeedMenu()
             }
         }
     }

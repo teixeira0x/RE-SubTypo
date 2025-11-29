@@ -38,12 +38,8 @@
     <string name="description_player_seek_backward">Backward</string>
     <string name="description_player_seek_forward">Forward</string>
     <string name="description_player_visibility">Video player visibility</string>
-    <string name="description_player_playback_speed">Playback speed</string>
-    <string name="description_create_project">Create a new project</string>
+
     <string name="description_video_thumbnail">Thumbnail of the video</string>
-    <string name="description_select_video">Select a video</string>
-    <string name="description_remove_video">Remove the selected video</string>
-    <string name="description_delete_subtitle">Delete subtitle</string>
     <!-- Permission -->
     <string name="permission_required">Required permissions</string>
     <string name="permission_required_detail">This app requires permissions to access video and subtitle files. Without these permissions, certain features may not function properly.</string>
@@ -88,6 +84,8 @@
     <string name="video_player_error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
     <string name="video_player_error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
     <string name="video_player_error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+    <string name="player_playback_speed">Playback speed</string>
+
     <!-- About -->
     <string name="about_title">About</string>
     <string name="about_contribution">Contribution</string>
