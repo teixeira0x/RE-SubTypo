@@ -3,6 +3,7 @@ package com.teixeira0x.subtypo.core.data.repository
 import android.content.Context
 import android.media.MediaMetadataRetriever
 import android.provider.MediaStore
+import android.util.Log
 import androidx.core.net.toUri
 import com.teixeira0x.subtypo.core.media.model.Album
 import com.teixeira0x.subtypo.core.media.model.Video
@@ -11,7 +12,6 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import org.slf4j.LoggerFactory
 import java.io.File
 import javax.inject.Inject
 
@@ -19,8 +19,6 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
     VideoRepository {
 
     companion object {
-        private val log = LoggerFactory.getLogger(VideoRepositoryImpl::class.java)
-
         private val VIDEO_PROJECTION =
             arrayOf(
                 MediaStore.Video.Media.TITLE,
@@ -93,10 +91,10 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
                                 )
                             }
                         } catch (e: Exception) {
-                            log.error("Error processing video", e)
+                            Log.e("VideoRepositoryImpl", "Error processing video", e)
                         }
                     }
-                } ?: log.warn("Cursor is null")
+                }
 
             emit(videoList)
         }
@@ -141,7 +139,7 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
                         cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_DISPLAY_NAME)
 
                     if (albumIdIndex == -1 || albumNameIndex == -1) {
-                        log.warn("Required columns not found in MediaStore")
+                        Log.w("VideoRepositoryImpl", "Required columns not found in MediaStore")
                         return@use
                     }
 
@@ -153,7 +151,7 @@ class VideoRepositoryImpl @Inject constructor(@ApplicationContext private val ap
                             albumList.add(Album(id = albumId, name = albumName))
                         }
                     }
-                } ?: log.warn("Cursor is null")
+                }
 
             emit(albumList)
         }

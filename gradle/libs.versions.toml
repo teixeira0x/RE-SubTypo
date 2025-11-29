@@ -9,8 +9,6 @@ google-dagger-hilt = "2.53.1"
 google-ksp = "2.0.21-1.0.27"
 kotlin-coroutines = "1.8.1"
 util-aboutlibraries = "11.2.3"
-util-slf4j-api = "2.0.7"
-util-logback-android = "3.0.0"
 tests-junit = "4.13.2"
 
 android-plugin  = "8.13.1"
@@ -48,9 +46,6 @@ util-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", versi
 util-aboutlibraries = { module = "com.mikepenz:aboutlibraries", version.ref = "util-aboutlibraries" }
 util-aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "util-aboutlibraries" }
 util-glide = { module = "com.github.bumptech.glide:glide", version = "4.16.0" }
-util-slf4j-api = { module = "org.slf4j:slf4j-api", version.ref = "util-slf4j-api" }
-util-logback-android = { module = "com.github.tony19:logback-android", version.ref = "util-logback-android" }
-
 # Kotlin
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }

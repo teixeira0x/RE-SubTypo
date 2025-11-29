@@ -11,7 +11,6 @@ plugins {
     alias(libs.plugins.google.ksp)
     alias(libs.plugins.google.dagger.hilt)
     alias(libs.plugins.util.aboutlibraries)
-    id("app.cash.sqldelight")
 }
 
 android {
@@ -67,14 +66,6 @@ android {
     aboutLibraries { excludeFields = arrayOf("generated") }
 }
 
-sqldelight {
-    databases {
-        create("SubTypoDatabase") {
-            packageName.set("com.teixeira0x.subtypo.core.database")
-        }
-    }
-}
-
 dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.androidx.annotation)
@@ -101,8 +92,6 @@ dependencies {
     implementation(libs.util.aboutlibraries)
     implementation(libs.util.aboutlibraries.core)
     implementation(libs.util.glide)
-    implementation(libs.util.slf4j.api)
-    implementation(libs.util.logback.android)
     debugImplementation(libs.util.leakcanary)
 
     // Test

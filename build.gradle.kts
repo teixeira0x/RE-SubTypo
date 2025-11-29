@@ -14,8 +14,6 @@ plugins {
     alias(libs.plugins.google.ksp) apply false
     alias(libs.plugins.google.dagger.hilt) apply false
     alias(libs.plugins.util.aboutlibraries) apply false
-
-    id("app.cash.sqldelight") version "2.0.2" apply false
 }
 
 fun Project.configureBaseExtension() {
