@@ -39,12 +39,14 @@ class PlayerErrorMessageProvider(private val context: Context) :
                         cause.cause is DecoderQueryException -> {
                             context.getString(R.string.video_player_error_querying_decoders)
                         }
+
                         cause.secureDecoderRequired -> {
                             context.getString(
                                 R.string.video_player_error_no_secure_decoder,
                                 cause.mimeType,
                             )
                         }
+
                         else -> {
                             context.getString(
                                 R.string.video_player_error_no_decoder,

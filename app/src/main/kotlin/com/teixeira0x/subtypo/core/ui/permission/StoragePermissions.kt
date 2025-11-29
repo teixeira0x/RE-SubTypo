@@ -34,8 +34,7 @@ class StoragePermissions(private val fragment: Fragment) {
     private var onPermissionsGranted: (() -> Unit)? = null
 
     private val reqPermissions =
-        fragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) {
-            permissions ->
+        fragment.registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             if (fragment.requireContext().isPermissionsGranted()) {
                 onPermissionsGranted?.invoke()
                 return@registerForActivityResult
@@ -49,10 +48,12 @@ class StoragePermissions(private val fragment: Fragment) {
                         showPermissionSettingsDialog()
                         return@registerForActivityResult
                     }
+
                     PermissionResult.DENIED -> {
                         showRequestPermissionDialog()
                         return@registerForActivityResult
                     }
+
                     else -> Unit
                 }
             }
@@ -65,6 +66,7 @@ class StoragePermissions(private val fragment: Fragment) {
             fragment.shouldShowRequestPermissionRationale(permission.key) -> {
                 PermissionResult.DENIED
             }
+
             permission.value -> PermissionResult.GRANTED
             else -> PermissionResult.DENIED_FOREVER
         }

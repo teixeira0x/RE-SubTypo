@@ -3,11 +3,9 @@ package com.teixeira0x.subtypo.ui.preference.fragment
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
-import android.view.accessibility.CaptioningManager
 import androidx.activity.OnBackPressedCallback
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.viewModels
@@ -117,6 +115,7 @@ class PreferencesFragment :
         when (key) {
             PreferencesManager.KEY_APPEARANCE_UI_MODE ->
                 AppCompatDelegate.setDefaultNightMode(PreferencesManager.appearanceUIMode)
+
             PreferencesManager.KEY_APPEARANCE_DYNAMICCOLORS,
             PreferencesManager.KEY_APPEARANCE_AMOLED -> {
                 handler.removeCallbacks(recreateAction)

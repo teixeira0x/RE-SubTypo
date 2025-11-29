@@ -1,6 +1,6 @@
 package com.teixeira0x.subtypo.core.data.di
 
-import com.teixeira0x.subtypo.core.data.repository.*
+import com.teixeira0x.subtypo.core.data.repository.VideoRepositoryImpl
 import com.teixeira0x.subtypo.core.media.repository.VideoRepository
 import dagger.Binds
 import dagger.Module

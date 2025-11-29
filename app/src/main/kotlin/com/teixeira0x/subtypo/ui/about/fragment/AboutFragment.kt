@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.widget.TooltipCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
@@ -68,6 +67,7 @@ class AboutFragment : Fragment() {
             ),
         )
     }
+
     private fun openUrl(url: String) {
         MaterialAlertDialogBuilder(requireContext()).apply {
             setMessage(getString(R.string.open_url_info_msg, url))

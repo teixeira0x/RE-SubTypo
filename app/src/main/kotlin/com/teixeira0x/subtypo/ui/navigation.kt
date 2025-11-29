@@ -3,7 +3,6 @@ package com.teixeira0x.subtypo.ui
 import android.content.Context
 import android.content.Intent
 import com.teixeira0x.subtypo.ui.about.activity.AboutActivity
-import com.teixeira0x.subtypo.ui.project.activity.ProjectActivity
 
 /** Navigate to about activity. */
 fun navigateToAboutActivity(context: Context) {

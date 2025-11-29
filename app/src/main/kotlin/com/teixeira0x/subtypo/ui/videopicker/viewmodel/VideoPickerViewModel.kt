@@ -28,10 +28,16 @@ import com.teixeira0x.subtypo.ui.videopicker.mvi.VideoPickerUiEvent
 import com.teixeira0x.subtypo.ui.videopicker.mvi.VideoPickerUiState
 import com.teixeira0x.subtypo.ui.videopicker.util.videoListSortByName
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class VideoPickerViewModel

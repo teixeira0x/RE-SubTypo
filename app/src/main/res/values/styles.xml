@@ -1,89 +1,89 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
-  <style name="MaterialAlertDialog.SubTypo" parent="MaterialAlertDialog.Material3">
-    <item name="enforceMaterialTheme">false</item>
-    <item name="backgroundTint">?attr/colorSurfaceContainerLow</item>
-    <item name="shapeAppearance">@style/ShapeAppearance.SubTypo.LargeComponent</item>
-    <item name="shapeAppearanceOverlay">@null</item>
-  </style>
+    <style name="MaterialAlertDialog.SubTypo" parent="MaterialAlertDialog.Material3">
+        <item name="enforceMaterialTheme">false</item>
+        <item name="backgroundTint">?attr/colorSurfaceContainerLow</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.SubTypo.LargeComponent</item>
+        <item name="shapeAppearanceOverlay">@null</item>
+    </style>
 
-  <style name="ShapeAppearance.SubTypo.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
-    <item name="cornerFamily">rounded</item>
-    <item name="cornerSize">12dp</item>
-  </style>
+    <style name="ShapeAppearance.SubTypo.MediumComponent" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
 
-  <style name="ShapeAppearance.SubTypo.LargeComponent" parent="ShapeAppearance.Material3.LargeComponent">
-    <item name="cornerFamily">rounded</item>
-    <item name="cornerSize">24dp</item>
-  </style>
+    <style name="ShapeAppearance.SubTypo.LargeComponent" parent="ShapeAppearance.Material3.LargeComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">24dp</item>
+    </style>
 
-  <style name="ShapeAppearance.SubTypo.BottomBar" parent="ShapeAppearance.Material3.MediumComponent">
-    <item name="cornerFamily">rounded</item>
-    <item name="cornerSizeTopLeft">12dp</item>
-    <item name="cornerSizeTopRight">12dp</item>
-    <item name="cornerSizeBottomLeft">0dp</item>
-    <item name="cornerSizeBottomRight">0dp</item>
-  </style>
+    <style name="ShapeAppearance.SubTypo.BottomBar" parent="ShapeAppearance.Material3.MediumComponent">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSizeTopLeft">12dp</item>
+        <item name="cornerSizeTopRight">12dp</item>
+        <item name="cornerSizeBottomLeft">0dp</item>
+        <item name="cornerSizeBottomRight">0dp</item>
+    </style>
 
-  <style name="Widget.SubTypo.BottomSheet.Modal" parent="Widget.Material3.BottomSheet.Modal">
-    <item name="shapeAppearance">@style/ShapeAppearance.SubTypo.LargeComponent</item>
-  </style>
+    <style name="Widget.SubTypo.BottomSheet.Modal" parent="Widget.Material3.BottomSheet.Modal">
+        <item name="shapeAppearance">@style/ShapeAppearance.SubTypo.LargeComponent</item>
+    </style>
 
-  <style name="Widget.SubTypo.BottomSheet.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
-    <item name="android:minHeight">0dp</item>
-    <item name="android:layout_height">12dp</item>
-    <item name="android:paddingTop">@dimen/padding_medium</item>
-    <item name="android:paddingBottom">@dimen/padding_small</item>
-  </style>
+    <style name="Widget.SubTypo.BottomSheet.DragHandle" parent="Widget.Material3.BottomSheet.DragHandle">
+        <item name="android:minHeight">0dp</item>
+        <item name="android:layout_height">12dp</item>
+        <item name="android:paddingTop">@dimen/padding_medium</item>
+        <item name="android:paddingBottom">@dimen/padding_small</item>
+    </style>
 
-  <style name="Widget.SubTypo.PositiveButton.Dialog" parent="Widget.Material3.Button" />
+    <style name="Widget.SubTypo.PositiveButton.Dialog" parent="Widget.Material3.Button" />
 
-  <style name="Widget.SubTypo.NegativeButton.Dialog" parent="Widget.Material3.Button.OutlinedButton">
-    <item name="android:layout_marginEnd">@dimen/margin_small</item>
-  </style>
-  
-  <style name="Widget.SubTypo.TextInputLayout.FilledBox" parent="Widget.Material3.TextInputLayout.FilledBox">
-    <item name="hintAnimationEnabled">true</item>
-    <item name="boxCornerRadiusTopStart">10dp</item>
-    <item name="boxCornerRadiusTopEnd">10dp</item>
-  </style>
-  
-  <style name="Widget.SubTypo.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
-    <item name="hintAnimationEnabled">true</item>
-    <item name="boxCornerRadiusTopStart">10dp</item>
-    <item name="boxCornerRadiusTopEnd">10dp</item>
-    <item name="boxCornerRadiusBottomStart">10dp</item>
-    <item name="boxCornerRadiusBottomEnd">10dp</item>
-  </style>
+    <style name="Widget.SubTypo.NegativeButton.Dialog" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:layout_marginEnd">@dimen/margin_small</item>
+    </style>
 
-  <style name="Widget.SubTypo.TextInputLayout.ExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
-    <item name="hintAnimationEnabled">true</item>
-    <item name="boxCornerRadiusTopStart">10dp</item>
-    <item name="boxCornerRadiusTopEnd">10dp</item>
-    <item name="boxCornerRadiusBottomStart">10dp</item>
-    <item name="boxCornerRadiusBottomEnd">10dp</item>
-  </style>
+    <style name="Widget.SubTypo.TextInputLayout.FilledBox" parent="Widget.Material3.TextInputLayout.FilledBox">
+        <item name="hintAnimationEnabled">true</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+    </style>
 
-  <style name="Widget.SubTypo.Chip" parent="Widget.Material3.Chip.Filter">
-    <item name="chipBackgroundColor">?attr/colorSurface</item>
-  </style>
+    <style name="Widget.SubTypo.TextInputLayout" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="hintAnimationEnabled">true</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+    </style>
 
-  <style name="Widget.SubTypo.ActionMode" parent="Widget.Material3.ActionMode">
-    <item name="background">@drawable/shape_toolbar</item>
-    <item name="backgroundSplit">?attr/colorOnSurfaceInverse</item>
-    <item name="closeItemLayout">@layout/layout_action_mode_close_item</item>
-  </style>
+    <style name="Widget.SubTypo.TextInputLayout.ExposedDropdownMenu" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
+        <item name="hintAnimationEnabled">true</item>
+        <item name="boxCornerRadiusTopStart">10dp</item>
+        <item name="boxCornerRadiusTopEnd">10dp</item>
+        <item name="boxCornerRadiusBottomStart">10dp</item>
+        <item name="boxCornerRadiusBottomEnd">10dp</item>
+    </style>
 
-  <style name="Widget.SubTypo.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
-    <item name="paddingBottomSystemWindowInsets">false</item>
-    <item name="paddingLeftSystemWindowInsets">false</item>
-    <item name="paddingRightSystemWindowInsets">false</item>
-    <item name="elevation">0dp</item>
-    <item name="backgroundTint">?attr/colorSurfaceContainer</item>
-    <item name="shapeAppearance">@style/ShapeAppearance.SubTypo.BottomBar</item>
-  </style>
+    <style name="Widget.SubTypo.Chip" parent="Widget.Material3.Chip.Filter">
+        <item name="chipBackgroundColor">?attr/colorSurface</item>
+    </style>
 
-  <style name="AboutLibrariesSubTypoStyle" parent="AboutLibrariesStyle">
-    <item name="aboutLibrariesCardBackground">?attr/colorSurfaceContainerLow</item>
-  </style>
+    <style name="Widget.SubTypo.ActionMode" parent="Widget.Material3.ActionMode">
+        <item name="background">@drawable/shape_toolbar</item>
+        <item name="backgroundSplit">?attr/colorOnSurfaceInverse</item>
+        <item name="closeItemLayout">@layout/layout_action_mode_close_item</item>
+    </style>
+
+    <style name="Widget.SubTypo.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">
+        <item name="paddingBottomSystemWindowInsets">false</item>
+        <item name="paddingLeftSystemWindowInsets">false</item>
+        <item name="paddingRightSystemWindowInsets">false</item>
+        <item name="elevation">0dp</item>
+        <item name="backgroundTint">?attr/colorSurfaceContainer</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.SubTypo.BottomBar</item>
+    </style>
+
+    <style name="AboutLibrariesSubTypoStyle" parent="AboutLibrariesStyle">
+        <item name="aboutLibrariesCardBackground">?attr/colorSurfaceContainerLow</item>
+    </style>
 </resources>

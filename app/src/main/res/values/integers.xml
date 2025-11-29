@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <integer name="video_picker_grid_span_count">3</integer>
-  <integer name="video_picker_grid_span_count_landscape">5</integer>
+    <integer name="video_picker_grid_span_count">3</integer>
+    <integer name="video_picker_grid_span_count_landscape">5</integer>
 </resources>

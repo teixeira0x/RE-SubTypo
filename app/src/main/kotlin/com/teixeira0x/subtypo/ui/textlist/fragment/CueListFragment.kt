@@ -19,7 +19,6 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.graphics.Insets
@@ -31,7 +30,6 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.teixeira0x.subtypo.R
 import com.teixeira0x.subtypo.core.subtitle.model.Cue
 import com.teixeira0x.subtypo.databinding.FragmentCueListBinding
 import com.teixeira0x.subtypo.ui.textedit.fragment.CueEditSheetFragment
@@ -123,9 +121,9 @@ class CueListFragment : Fragment(), CueClickListener, CueTimeClickListener {
         handler.postDelayed(
             Runnable {
                 CueEditSheetFragment.newInstance(
-                        playerPosition = viewModel.playerPosition.value ?: 0L,
-                        cueIndex = cueIndex,
-                    )
+                    playerPosition = viewModel.playerPosition.value ?: 0L,
+                    cueIndex = cueIndex,
+                )
                     .show(childFragmentManager, "CueEditSheetFragment")
             },
             50L,

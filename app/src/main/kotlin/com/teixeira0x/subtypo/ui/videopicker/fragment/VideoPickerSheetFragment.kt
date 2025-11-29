@@ -102,11 +102,13 @@ class VideoPickerSheetFragment : BaseBottomSheetFragment() {
                     is VideoPickerUiState.Loading -> {
                         binding.progressIndicator.isVisible = true
                     }
+
                     is VideoPickerUiState.Loaded -> {
                         updateChipGroupAlbums(state.albums)
                         videoPreviewListAdapter.submitList(state.videos)
                         binding.progressIndicator.isVisible = false
                     }
+
                     is VideoPickerUiState.Error -> {
                         binding.chipGroupAlbums.isVisible = false
                         binding.rvVideoPreviewList.isVisible = false
@@ -124,10 +126,12 @@ class VideoPickerSheetFragment : BaseBottomSheetFragment() {
                 when (event) {
                     is VideoPickerUiEvent.UpdateVideoList ->
                         videoPreviewListAdapter.submitList(event.videos)
+
                     is VideoPickerUiEvent.ShowLoading -> {
                         binding.rvVideoPreviewList.visibility = View.INVISIBLE
                         binding.progressIndicator.isVisible = true
                     }
+
                     is VideoPickerUiEvent.HideLoading -> {
                         binding.rvVideoPreviewList.visibility = View.VISIBLE
                         binding.progressIndicator.isVisible = false

@@ -46,10 +46,12 @@ object TimeUtils {
                 val (hours, minutes, secondsMillis) = parts
                 parseTime(hours, minutes, secondsMillis)
             }
+
             2 -> { // mm:ss(.SSS)
                 val (minutes, secondsMillis) = parts
                 parseTime("0", minutes, secondsMillis)
             }
+
             else -> throw IllegalArgumentException("Invalid time format: $this")
         }
     }
@@ -60,9 +62,9 @@ object TimeUtils {
         val millis = if (secParts.size > 1) secParts[1].padEnd(3, '0').take(3).toLong() else 0
 
         return (hours.toLong() * TIME_UNIT_HOUR) +
-            (minutes.toLong() * TIME_UNIT_MINUTE) +
-            (seconds * TIME_UNIT_SECOND) +
-            millis
+                (minutes.toLong() * TIME_UNIT_MINUTE) +
+                (seconds * TIME_UNIT_SECOND) +
+                millis
     }
 
     /**
@@ -85,20 +87,20 @@ object TimeUtils {
         return when (format) {
             "hh:mm:ss,SSS" ->
                 parts.size == 3 &&
-                    isInRange(parts[0], 0, 99, 2) &&
-                    isInRange(parts[1], 0, 59, 2) &&
-                    isValidSecondsFormat(parts[2], true)
+                        isInRange(parts[0], 0, 99, 2) &&
+                        isInRange(parts[1], 0, 59, 2) &&
+                        isValidSecondsFormat(parts[2], true)
 
             "hh:mm:ss" ->
                 parts.size == 3 &&
-                    isInRange(parts[0], 0, 99, 2) &&
-                    isInRange(parts[1], 0, 59, 2) &&
-                    isInRange(parts[2], 0, 59, 2)
+                        isInRange(parts[0], 0, 99, 2) &&
+                        isInRange(parts[1], 0, 59, 2) &&
+                        isInRange(parts[2], 0, 59, 2)
 
             "mm:ss.SS" ->
                 parts.size == 2 &&
-                    isInRange(parts[0], 0, 59, 2) &&
-                    isValidSecondsFormat(parts[1], false)
+                        isInRange(parts[0], 0, 59, 2) &&
+                        isValidSecondsFormat(parts[1], false)
 
             "mm:ss" ->
                 parts.size == 2 && isInRange(parts[0], 0, 59, 2) && isInRange(parts[1], 0, 59, 2)
@@ -122,8 +124,10 @@ object TimeUtils {
             !millisecondsExpected && secParts.size == 1 -> isInRange(secParts[0], 0, 59, 2)
             millisecondsExpected && secParts.size == 2 ->
                 isInRange(secParts[0], 0, 59, 2) && isInRange(secParts[1], 0, 999, 3)
+
             !millisecondsExpected && secParts.size == 2 ->
                 isInRange(secParts[0], 0, 59, 2) && isInRange(secParts[1], 0, 99, 2)
+
             else -> false
         }
     }
@@ -141,6 +145,6 @@ object TimeUtils {
      */
     fun isInRange(value: String, min: Int, max: Int, expectedLength: Int): Boolean {
         return value.length == expectedLength &&
-            value.toIntOrNull()?.let { it in min..max } ?: false
+                value.toIntOrNull()?.let { it in min..max } ?: false
     }
 }

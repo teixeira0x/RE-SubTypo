@@ -4,8 +4,8 @@
 
     <item
         android:id="@+id/menu_file"
-        android:title="@string/file"
         android:icon="@drawable/ic_folder"
+        android:title="@string/file"
         app:showAsAction="ifRoom">
         <!-- "file" submenu -->
         <menu>
@@ -27,8 +27,8 @@
 
     <item
         android:id="@+id/menu_subtitle"
-        android:title="@string/subtitle"
         android:icon="@drawable/ic_subtitle"
+        android:title="@string/subtitle"
         app:showAsAction="ifRoom">
         <!-- "file" submenu -->
         <menu>

@@ -30,11 +30,11 @@ abstract class BaseActivity : AppCompatActivity() {
         message: String? = null,
     ) {
         ProgressDialogFragment.newInstance(
-                orientation = orientation,
-                style = style,
-                cancelable = cancelable,
-                message = message,
-            )
+            orientation = orientation,
+            style = style,
+            cancelable = cancelable,
+            message = message,
+        )
             .also {
                 progressDialog?.dismiss() // Dismiss previous dialog
                 progressDialog = it

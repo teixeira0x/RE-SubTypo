@@ -19,8 +19,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teixeira0x.subtypo.R
-import com.teixeira0x.subtypo.core.subtitle.model.Cue
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditIntent
 import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditUiEvent
@@ -28,9 +26,11 @@ import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditUiState
 import com.teixeira0x.subtypo.ui.textedit.util.CueFieldType
 import com.teixeira0x.subtypo.ui.textedit.validate.CueValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 @HiltViewModel
 class CueEditViewModel
@@ -62,7 +62,8 @@ constructor(
         _cueEditUiState.value = CueEditUiState.Loading
         viewModelScope.launch {
             subtitle = event.subtitle
-            _cueEditUiState.value = CueEditUiState.Loaded(event.subtitle.data.cues.getOrNull(event.cueIndex))
+            _cueEditUiState.value =
+                CueEditUiState.Loaded(event.subtitle.data.cues.getOrNull(event.cueIndex))
         }
     }
 
@@ -72,6 +73,7 @@ constructor(
                 when (event.type) {
                     CueFieldType.START_TIME,
                     CueFieldType.END_TIME -> cueValidator.checkTime(event.text, subtitleTimeFormat)
+
                     CueFieldType.TEXT -> cueValidator.checkText(event.text)
                 }
 

@@ -102,7 +102,7 @@ class LRCLyricsFormat internal constructor() : SubtitleFormat("LRC Lyrics", ".lr
         val (minutes, seconds, centiseconds) = match.destructured
 
         return (minutes.toLong() * 60 * 1000) +
-            (seconds.toLong() * 1000) +
-            (centiseconds.toLong() * 10)
+                (seconds.toLong() * 1000) +
+                (centiseconds.toLong() * 10)
     }
 }

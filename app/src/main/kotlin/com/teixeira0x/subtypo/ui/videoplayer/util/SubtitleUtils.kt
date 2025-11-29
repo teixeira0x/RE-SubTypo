@@ -16,10 +16,10 @@
 package com.teixeira0x.subtypo.ui.videoplayer.util
 
 import androidx.core.text.HtmlCompat
-import androidx.media3.common.text.Cue as ExoCue
 import com.teixeira0x.subtypo.core.subtitle.format.SubRipFormat
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.ui.videoplayer.model.ExoCuesTimed
+import androidx.media3.common.text.Cue as ExoCue
 
 object SubtitleUtils {
 
@@ -42,6 +42,7 @@ object SubtitleUtils {
                         when (subtitleFormat) {
                             is SubRipFormat ->
                                 HtmlCompat.fromHtml(cue.text, HtmlCompat.FROM_HTML_MODE_LEGACY)
+
                             else -> cue.text
                         }
                     ExoCue.Builder().setText(text).build()

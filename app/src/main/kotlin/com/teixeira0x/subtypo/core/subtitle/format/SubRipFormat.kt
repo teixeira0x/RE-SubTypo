@@ -125,8 +125,8 @@ class SubRipFormat internal constructor() : SubtitleFormat("SubRip", ".srt") {
         val timeCodes = timeCodeLine.split(" --> ")
         if (
             timeCodes.size != 2 ||
-                !TimeUtils.isValidTime(timeCodes[0], timeFormat) ||
-                !TimeUtils.isValidTime(timeCodes[1], timeFormat)
+            !TimeUtils.isValidTime(timeCodes[0], timeFormat) ||
+            !TimeUtils.isValidTime(timeCodes[1], timeFormat)
         ) {
             return emptyList()
         }

@@ -15,8 +15,6 @@
 
 package com.teixeira0x.subtypo.ui.textedit.util
 
-import android.content.Context
-import com.google.android.material.chip.Chip
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getFormattedTime
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getMilliseconds
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.isValidTime

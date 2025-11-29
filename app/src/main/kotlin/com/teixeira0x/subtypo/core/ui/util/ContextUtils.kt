@@ -20,7 +20,6 @@ import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat.checkSelfPermission
 import java.io.File
 import java.nio.charset.StandardCharsets
-import java.nio.file.StandardOpenOption.*
 
 fun Context.writeTempFile(name: String, content: String): File {
     val file = File(this.filesDir, name)

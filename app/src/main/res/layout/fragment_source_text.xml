@@ -12,20 +12,20 @@
         android:gravity="top|start"
         android:hint="@string/subtitle_source"
         android:inputType="textMultiLine|text"
-        android:scrollbars="vertical"
         android:overScrollMode="always"
-        android:padding="16dp" />
+        android:padding="16dp"
+        android:scrollbars="vertical" />
 
 
     <com.google.android.material.bottomappbar.BottomAppBar
         android:id="@+id/bottom_app_bar"
+        style="@style/Widget.SubTypo.BottomAppBar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        style="@style/Widget.SubTypo.BottomAppBar"
-        app:navigationContentDescription="@string/cue_list_sort_by_time"
-        app:fabCradleMargin="10dp"
         app:fabAlignmentMode="center"
+        app:fabCradleMargin="10dp"
         app:fabCradleRoundedCornerRadius="20dp"
-        app:fabCradleVerticalOffset="10dp" />
+        app:fabCradleVerticalOffset="10dp"
+        app:navigationContentDescription="@string/cue_list_sort_by_time" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

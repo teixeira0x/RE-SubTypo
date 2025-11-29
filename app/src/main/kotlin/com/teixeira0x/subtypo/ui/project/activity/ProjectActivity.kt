@@ -110,19 +110,17 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
             )
 
             R.id.menu_subtitle_format -> {
+                val allFormatsOptions = SubtitleFormat.allSubtitleFormats.map {
+                    OptionItem(
+                        R.drawable.ic_subtitle,
+                        "${it.name} (${it.extension})"
+                    )
+                }
+
                 showOptionListDialog(
                     this,
                     getString(R.string.subtitle_select_format),
-                    listOf(
-                        OptionItem(
-                            R.drawable.ic_subtitle,
-                            "SubRip (.srt)"
-                        ),
-                        OptionItem(
-                            R.drawable.ic_subtitle,
-                            "LRC Lyrics (.lrc)"
-                        )
-                    )
+                    allFormatsOptions
                 ) { pos, item ->
                     cueListViewModel.doIntent(
                         CueListIntent.LoadSubtitle(
@@ -131,7 +129,6 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
                             )
                         )
                     )
-
                 }
             }
 

@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-  <string-array name="video_player_controls_playback_speeds">
-    <item>0.25x</item>
-    <item>0.5x</item>
-    <item>0.75x</item>
-    <item>@string/common_normal</item>
-    <item>1.25x</item>
-    <item>1.5x</item>
-    <item>2x</item>
-  </string-array>
+    <string-array name="video_player_controls_playback_speeds">
+        <item>0.25x</item>
+        <item>0.5x</item>
+        <item>0.75x</item>
+        <item>@string/common_normal</item>
+        <item>1.25x</item>
+        <item>1.5x</item>
+        <item>2x</item>
+    </string-array>
 
-  <string-array name="translate_languages">
-    <item>English</item>
-    <item>Portuguese</item>
-    <item>Spanish</item>
-    <item>French</item>
-    <item>German</item>
-    <item>Italian</item>
-    <item>Russian</item>
-    <item>Chinese (Simplified)</item>
-    <item>Japanese</item>
-    <item>Korean</item>
-    <item>Arabic</item>
-    <item>Hindi</item>
-  </string-array>
+    <string-array name="translate_languages">
+        <item>English</item>
+        <item>Portuguese</item>
+        <item>Spanish</item>
+        <item>French</item>
+        <item>German</item>
+        <item>Italian</item>
+        <item>Russian</item>
+        <item>Chinese (Simplified)</item>
+        <item>Japanese</item>
+        <item>Korean</item>
+        <item>Arabic</item>
+        <item>Hindi</item>
+    </string-array>
 </resources>

@@ -10,8 +10,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/shape_toolbar"
-        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior"
-        app:elevation="1dp">
+        app:elevation="1dp"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$Behavior">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
@@ -28,9 +28,9 @@
 
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/fragment_preferences"
+            android:name="com.teixeira0x.subtypo.ui.preference.fragment.PreferencesFragment"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:name="com.teixeira0x.subtypo.ui.preference.fragment.PreferencesFragment" />
+            android:layout_height="match_parent" />
 
     </androidx.core.widget.NestedScrollView>
 
