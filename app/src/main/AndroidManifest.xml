@@ -21,7 +21,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.project.activity.ProjectActivity"
+            android:name=".ui.editor.activity.EditorActivity"
             android:configChanges="screenSize"
             android:exported="true"
             android:launchMode="singleTop">

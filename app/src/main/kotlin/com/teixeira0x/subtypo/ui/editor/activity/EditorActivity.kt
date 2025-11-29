@@ -1,4 +1,4 @@
-package com.teixeira0x.subtypo.ui.project.activity
+package com.teixeira0x.subtypo.ui.editor.activity
 
 import android.content.Intent
 import android.net.Uri
@@ -22,7 +22,7 @@ import com.teixeira0x.subtypo.core.subtitle.format.SubtitleFormat
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.core.ui.base.BaseEdgeToEdgeActivity
 import com.teixeira0x.subtypo.core.ui.util.showToastLong
-import com.teixeira0x.subtypo.databinding.ActivityProjectBinding
+import com.teixeira0x.subtypo.databinding.ActivityEditorBinding
 import com.teixeira0x.subtypo.ui.optionlist.dialog.showOptionListDialog
 import com.teixeira0x.subtypo.ui.optionlist.model.OptionItem
 import com.teixeira0x.subtypo.ui.preference.SettingsActivity
@@ -44,7 +44,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
 @AndroidEntryPoint
-class ProjectActivity : BaseEdgeToEdgeActivity() {
+class EditorActivity : BaseEdgeToEdgeActivity() {
     private val scope = CoroutineScope(Dispatchers.Main)
 
     private val videoPlayerViewModel by viewModels<VideoPlayerViewModel>()
@@ -65,13 +65,13 @@ class ProjectActivity : BaseEdgeToEdgeActivity() {
         uri?.let { saveSubtitleFile(it) }
     }
 
-    private var _binding: ActivityProjectBinding? = null
+    private var _binding: ActivityEditorBinding? = null
 
-    private val binding: ActivityProjectBinding
+    private val binding: ActivityEditorBinding
         get() = checkNotNull(_binding) { "Activity has been destroyed!" }
 
     override fun bindView(): View {
-        return ActivityProjectBinding.inflate(layoutInflater).also { _binding = it }.root
+        return ActivityEditorBinding.inflate(layoutInflater).also { _binding = it }.root
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
