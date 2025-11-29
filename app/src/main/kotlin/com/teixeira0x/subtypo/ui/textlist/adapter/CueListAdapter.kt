@@ -53,7 +53,12 @@ class CueListAdapter(
 
     override fun onBindViewHolder(holder: CueListViewHolder, position: Int) {
         val isVisible = visibleCueIndices.contains(position)
-        holder.bind(cues[position], isVisible)
+        holder.bind(
+            cues.getOrNull(position - 1),
+            cues[position],
+            cues.getOrNull(position + 1),
+            isVisible
+        )
     }
 
     override fun getItemCount() = cues.size

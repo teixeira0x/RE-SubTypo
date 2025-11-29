@@ -135,8 +135,8 @@
     <string name="subtitle_cue_enter_end_time">Enter the end time</string>
     <string name="subtitle_cue_enter_text">Enter the text</string>
     <string name="subtitle_cue_invalid_time">Invalid time entered.</string>
+    <string name="subtitle_cue_overlap_warn">Overlap</string>
     <string name="cue_list_sort_by_time">Sort text by time</string>
-    <string name="cue_time_shortcuts">Time shortcuts</string>
     <string name="cue_remove">Remove text</string>
     <string name="file">File</string>
     <string name="subtitle_source">Subtitle Source</string>

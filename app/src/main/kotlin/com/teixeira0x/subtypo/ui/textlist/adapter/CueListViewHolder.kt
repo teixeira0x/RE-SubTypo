@@ -20,9 +20,16 @@ import android.text.Spanned
 import android.text.TextPaint
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.ForegroundColorSpan
+import android.text.style.RelativeSizeSpan
 import android.view.View
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.R
+import com.google.android.material.color.MaterialColors
+import com.teixeira0x.subtypo.R.color
+import com.teixeira0x.subtypo.R.string
 import com.teixeira0x.subtypo.core.subtitle.model.Cue
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getFormattedTime
 import com.teixeira0x.subtypo.databinding.LayoutCueItemBinding
@@ -33,14 +40,14 @@ class CueListViewHolder(
     private val cueTimeClickListener: CueTimeClickListener,
 ) : RecyclerView.ViewHolder(binding.root) {
 
-    fun bind(cue: Cue, isVisible: Boolean) {
+    fun bind(previousCue: Cue?, cue: Cue, nextCue: Cue?, isVisible: Boolean) {
         binding.apply {
             viewVisible.isVisible = isVisible
             with(cue) {
                 tvText.setText(text)
 
                 tvTime.movementMethod = LinkMovementMethod()
-                tvTime.text = getTimeTextSpan(cue)
+                tvTime.text = getTimeTextSpan(previousCue, cue, nextCue)
 
                 root.setOnClickListener {
                     cueClickListener.onCueClick(absoluteAdapterPosition, this@with)
@@ -49,7 +56,11 @@ class CueListViewHolder(
         }
     }
 
-    private fun getTimeTextSpan(cue: Cue): SpannableStringBuilder {
+    private fun getTimeTextSpan(
+        previousCue: Cue?,
+        cue: Cue,
+        nextCue: Cue?
+    ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
 
         builder.append(
@@ -63,6 +74,9 @@ class CueListViewHolder(
             },
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
+
+        val startTimeEndIndex = builder.length
+
         builder.append("|")
         builder.append(
             cue.endTime.getFormattedTime(),
@@ -76,6 +90,70 @@ class CueListViewHolder(
             Spanned.SPAN_EXCLUSIVE_EXCLUSIVE,
         )
 
+        val endTimeEndIndex = builder.length
+        builder.createOverlapSpan(previousCue, cue, nextCue, startTimeEndIndex, endTimeEndIndex)
+
         return builder
+    }
+
+    fun SpannableStringBuilder.createOverlapSpan(
+        previousCue: Cue?,
+        cue: Cue,
+        nextCue: Cue?,
+        startTimeEndIndex: Int,
+        endTimeEndIndex: Int
+    ) {
+        if (previousCue != null) {
+            if (cue.startTime < previousCue.endTime) {
+                setSpan(
+                    ForegroundColorSpan(
+                        MaterialColors.getColor(
+                            binding.tvTime,
+                            R.attr.colorError
+                        )
+                    ),
+                    0,
+                    startTimeEndIndex,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                append(" ")
+                val start = length
+                val text = binding.root.context.getString(string.subtitle_cue_overlap_warn)
+                append(text)
+
+                setSpan(
+                    ForegroundColorSpan(
+                        ContextCompat.getColor(binding.root.context, color.yellow)
+                    ),
+                    start,
+                    start + text.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+                setSpan(
+                    RelativeSizeSpan(0.8f),
+                    start,
+                    start + text.length,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+
+
+        }
+
+        if (nextCue != null) {
+            if (cue.endTime > nextCue.startTime) {
+                setSpan(
+                    ForegroundColorSpan(
+                        MaterialColors.getColor(
+                            binding.tvTime,
+                            R.attr.colorError
+                        )
+                    ),
+                    startTimeEndIndex + 1,
+                    endTimeEndIndex,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                )
+            }
+        }
     }
 }
