@@ -1,6 +1,5 @@
 package com.teixeira0x.subtypo.ui.editor.activity
 
-
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener

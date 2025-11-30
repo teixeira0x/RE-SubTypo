@@ -69,5 +69,4 @@
             app:layout_constraintTop_toBottomOf="@id/fragment_player" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
