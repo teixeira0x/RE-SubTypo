@@ -34,7 +34,7 @@ class AboutFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.tvAppVersion.setText(appVersion)
+        binding.tvAppVersion.text = appVersion
 
         binding.rvContribution.layoutManager = LinearLayoutManager(requireContext())
         binding.rvContribution.adapter = CardItemListAdapter(getContributionCardItemList())

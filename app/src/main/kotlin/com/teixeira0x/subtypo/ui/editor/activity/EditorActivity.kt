@@ -86,7 +86,11 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
         setSupportActionBar(binding.toolbar)
         PreferencesManager.registerOnSharedPreferenceChangeListener(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener { onBackPressedDispatcher.onBackPressed() }
+
+        binding.toolbar.setNavigationIcon(R.drawable.ic_close)
+        binding.toolbar.setNavigationOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
 
         observeViewModel()
     }
@@ -104,10 +108,6 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
 
         menuInflater.inflate(R.menu.activity_project_menu, menu)
         return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
-        return super.onPrepareOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -146,8 +146,6 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
             }
 
             R.id.menu_settings -> startActivity(Intent(this, SettingsActivity::class.java))
-
-            R.id.menu_close -> finish()
         }
 
         return super.onOptionsItemSelected(item)

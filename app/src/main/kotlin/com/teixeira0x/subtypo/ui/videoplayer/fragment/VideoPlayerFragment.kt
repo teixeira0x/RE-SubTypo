@@ -118,8 +118,6 @@ class VideoPlayerFragment : Fragment() {
                 }.show(childFragmentManager, "VideoPickerSheetFragment")
             }
         }
-
-
     }
 
     override fun onResume() {
@@ -151,6 +149,7 @@ class VideoPlayerFragment : Fragment() {
                     is VideoPlayerUiEvent.SeekTo -> player?.seekTo(event.position)
                     is VideoPlayerUiEvent.Pause -> pausePlayer()
                     is VideoPlayerUiEvent.Play -> playPlayer()
+                    else -> Unit
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
@@ -162,8 +161,8 @@ class VideoPlayerFragment : Fragment() {
             requireContext().getSystemService(Context.CAPTIONING_SERVICE) as CaptioningManager
         val systemCaptionStyle = captioningManager.userStyle
 
-        val captionStyleCompat = CaptionStyleCompat.createFromCaptionStyle(systemCaptionStyle);
-        binding.playerView.subtitleView?.setStyle(captionStyleCompat);
+        val captionStyleCompat = CaptionStyleCompat.createFromCaptionStyle(systemCaptionStyle)
+        binding.playerView.subtitleView?.setStyle(captionStyleCompat)
     }
 
     private fun updatePlayerVisibility(visible: Boolean) {
@@ -235,6 +234,7 @@ class VideoPlayerFragment : Fragment() {
             }
         }
 
+        binding.timelineView.setSubtitles(viewModel.subtitle?.data?.cues ?: emptyList())
         binding.playerView.subtitleView?.setCues(showingExoCues)
         updateTimeline()
 
@@ -253,6 +253,9 @@ class VideoPlayerFragment : Fragment() {
             binding.tvDuration.text = "-:-"
         } else {
             binding.tvDuration.text = duration.getFormattedTime()
+
+            binding.timelineView.setDuration(duration)
+            binding.timelineView.setPosition(currentPosition)
         }
 
         binding.seekBar.setMax(duration.toInt())

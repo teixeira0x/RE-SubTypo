@@ -31,7 +31,6 @@ import kotlinx.coroutines.launch
 
 class VideoPlayerViewModel : ViewModel() {
     private val _customUiEvent = MutableSharedFlow<VideoPlayerUiEvent>()
-
     val customUiEvent: SharedFlow<VideoPlayerUiEvent> = _customUiEvent.asSharedFlow()
 
     private val _videoPath = MutableLiveData<String>("")

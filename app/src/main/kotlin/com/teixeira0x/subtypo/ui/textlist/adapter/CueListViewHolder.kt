@@ -44,7 +44,7 @@ class CueListViewHolder(
         binding.apply {
             viewVisible.isVisible = isVisible
             with(cue) {
-                tvText.setText(text)
+                tvText.text = text
 
                 tvTime.movementMethod = LinkMovementMethod()
                 tvTime.text = getTimeTextSpan(previousCue, cue, nextCue)

@@ -86,14 +86,12 @@ class CrashActivity : BaseEdgeToEdgeActivity() {
         )
 
         binding.apply {
-            tvError.setText(
-                StringBuilder()
-                    .append("$appInfo\n")
-                    .append("$softwareInfo\n")
-                    .append("$date\n\n")
-                    .append(intent.getStringExtra(KEY_EXTRA_CRASH_ERROR))
-                    .toString()
-            )
+            tvError.text = StringBuilder()
+                .append("$appInfo\n")
+                .append("$softwareInfo\n")
+                .append("$date\n\n")
+                .append(intent.getStringExtra(KEY_EXTRA_CRASH_ERROR))
+                .toString()
 
             btnCopyAndReport.setOnClickListener {
                 ClipboardUtils.copyText(tvError.text.toString())

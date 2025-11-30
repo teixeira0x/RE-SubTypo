@@ -41,6 +41,7 @@
         app:navigationContentDescription="@string/cue_list_sort_by_time"
         app:navigationIcon="@drawable/ic_sort_clock" />
 
+
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/fab_add_cue"
         android:layout_width="wrap_content"

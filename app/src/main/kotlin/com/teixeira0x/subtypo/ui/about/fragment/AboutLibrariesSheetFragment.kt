@@ -18,7 +18,7 @@ class AboutLibrariesSheetFragment : BaseBottomSheetFragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): View? {
+    ): View {
         return FragmentSheetAboutLibrariesBinding.inflate(inflater).root
     }
 

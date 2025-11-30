@@ -17,11 +17,7 @@ package com.teixeira0x.subtypo.core.ui.util
 
 import android.content.Context
 import android.content.pm.PackageManager
-import android.net.Uri
-import android.provider.OpenableColumns
 import androidx.core.content.ContextCompat.checkSelfPermission
-import java.io.File
-import java.nio.charset.StandardCharsets
 
 fun Context.checkPermissions(permissions: Array<String>): Boolean {
     return permissions.all { perm ->
