@@ -19,12 +19,15 @@ object TimeUtils {
 
         return when (format) {
             "hh:mm:ss,SSS" -> String.format("%02d:%02d:%02d,%03d", hours, minutes, seconds, millis)
+            "hh:mm:ss.SSS" -> String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis)
             "mm:ss.SS" -> String.format("%02d:%02d.%02d", minutes, seconds, millis / 10)
             "hh:mm:ss" -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
             "mm:ss" -> String.format("%02d:%02d", minutes, seconds)
+
             else -> throw IllegalArgumentException("Unsupported format: $format")
         }
     }
+
 
     /**
      * Converts various time string formats to milliseconds.
@@ -86,6 +89,12 @@ object TimeUtils {
 
         return when (format) {
             "hh:mm:ss,SSS" ->
+                parts.size == 3 &&
+                        isInRange(parts[0], 0, 99, 2) &&
+                        isInRange(parts[1], 0, 59, 2) &&
+                        isValidSecondsFormat(parts[2], true)
+
+            "hh:mm:ss.SSS" ->
                 parts.size == 3 &&
                         isInRange(parts[0], 0, 99, 2) &&
                         isInRange(parts[1], 0, 59, 2) &&
