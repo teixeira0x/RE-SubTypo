@@ -84,6 +84,8 @@
     <string name="video_player_error_instantiating_decoder">Unable to instantiate decoder <xliff:g id="decoder_name">%1$s</xliff:g></string>
     <string name="video_player_error_unsupported_video">Media includes video tracks, but none are playable by this device</string>
     <string name="video_player_error_unsupported_audio">Media includes audio tracks, but none are playable by this device</string>
+    <string name="video_menu">Video</string>
+    <string name="video_menu_remove">Remove video</string>
     <string name="player_playback_speed">Playback speed</string>
 
     <!-- About -->

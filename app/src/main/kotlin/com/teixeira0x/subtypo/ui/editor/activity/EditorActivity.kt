@@ -49,6 +49,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+
 @AndroidEntryPoint
 class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListener {
     private val scope = CoroutineScope(Dispatchers.Main)
@@ -91,7 +92,10 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
             onBackPressedDispatcher.onBackPressed()
         }
 
+
         observeViewModel()
+
+
     }
 
     override fun onDestroy() {
@@ -112,23 +116,26 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.menu_open_subtitle -> openSubtitleFileLauncher.launch("*/*")
-            R.id.menu_save_subtitle,
-            R.id.menu_save_as_subtitle -> saveSubtitleLauncher.launch(
+            R.id.menu_save_subtitle, R.id.menu_save_as_subtitle -> saveSubtitleLauncher.launch(
                 cueListViewModel.subtitle.name + cueListViewModel.subtitle.format.extension
+            )
+
+            R.id.menu_video_select_video -> videoPlayerViewModel.doEvent(VideoPlayerIntent.SelectVideo)
+            R.id.menu_video_remove_video -> videoPlayerViewModel.doEvent(
+                VideoPlayerIntent.LoadVideoUri(
+                    ""
+                )
             )
 
             R.id.menu_subtitle_format -> {
                 val allFormatsOptions = SubtitleFormat.allSubtitleFormats.map {
                     OptionItem(
-                        R.drawable.ic_subtitle,
-                        "${it.name} (${it.extension})"
+                        R.drawable.ic_subtitle, "${it.name} (${it.extension})"
                     )
                 }
 
                 showOptionListDialog(
-                    this,
-                    getString(R.string.subtitle_select_format),
-                    allFormatsOptions
+                    this, getString(R.string.subtitle_select_format), allFormatsOptions
                 ) { pos, item ->
                     cueListViewModel.doIntent(
                         CueListIntent.LoadSubtitle(
@@ -251,8 +258,7 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
     }
 
     override fun onSharedPreferenceChanged(
-        sharedPreferences: SharedPreferences?,
-        key: String?
+        sharedPreferences: SharedPreferences?, key: String?
     ) {
         if (key == KEY_APPEARANCE_AMOLED) recreate()
     }

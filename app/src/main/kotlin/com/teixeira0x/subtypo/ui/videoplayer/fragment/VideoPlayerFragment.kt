@@ -104,19 +104,23 @@ class VideoPlayerFragment : Fragment() {
         binding.playerView.setErrorMessageProvider(PlayerErrorMessageProvider(requireContext()))
         binding.playerView.useController = false
         binding.playerView.setOnClickListener {
-            // Choose video
-            storagePermReq?.requestPermissions {
-                VideoPickerSheetFragment.newSingleChoice { video ->
-                    if (video.corrupted) {
-                        MaterialAlertDialogBuilder(requireContext())
-                            .setMessage(R.string.video_player_corrupted_file)
-                            .setPositiveButton(R.string.ok) { _, _ -> }
-                            .show()
-                        return@newSingleChoice
-                    }
-                    viewModel.doEvent(VideoPlayerIntent.LoadVideoUri(video.path))
-                }.show(childFragmentManager, "VideoPickerSheetFragment")
-            }
+            selectVideo()
+        }
+    }
+
+    private fun selectVideo() {
+        // Choose video
+        storagePermReq?.requestPermissions {
+            VideoPickerSheetFragment.newSingleChoice { video ->
+                if (video.corrupted) {
+                    MaterialAlertDialogBuilder(requireContext())
+                        .setMessage(R.string.video_player_corrupted_file)
+                        .setPositiveButton(R.string.ok) { _, _ -> }
+                        .show()
+                    return@newSingleChoice
+                }
+                viewModel.doEvent(VideoPlayerIntent.LoadVideoUri(video.path))
+            }.show(childFragmentManager, "VideoPickerSheetFragment")
         }
     }
 
@@ -142,6 +146,7 @@ class VideoPlayerFragment : Fragment() {
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { event ->
                 when (event) {
+                    is VideoPlayerUiEvent.SelectVideo -> selectVideo()
                     is VideoPlayerUiEvent.LoadUri -> prepareMedia(event.videoUri)
 
                     is VideoPlayerUiEvent.LoadSubtitle -> updateProgress()

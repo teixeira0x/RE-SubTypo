@@ -26,6 +26,26 @@
     </item>
 
     <item
+        android:id="@+id/menu_video"
+        android:icon="@drawable/ic_video"
+        android:title="@string/video_menu"
+        app:showAsAction="ifRoom">
+        <!-- "video" submenu -->
+        <menu>
+
+            <item
+                android:id="@+id/menu_video_select_video"
+                android:icon="@drawable/ic_import"
+                android:title="@string/video_picker_title" />
+
+            <item
+                android:id="@+id/menu_video_remove_video"
+                android:icon="@drawable/ic_close"
+                android:title="@string/video_menu_remove" />
+        </menu>
+    </item>
+
+    <item
         android:id="@+id/menu_subtitle"
         android:icon="@drawable/ic_subtitle"
         android:title="@string/subtitle"

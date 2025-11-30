@@ -54,6 +54,7 @@ class VideoPlayerViewModel : ViewModel() {
     fun doEvent(event: VideoPlayerIntent) {
         viewModelScope.launch {
             when (event) {
+                is VideoPlayerIntent.SelectVideo -> _customUiEvent.emit(VideoPlayerUiEvent.SelectVideo)
                 is VideoPlayerIntent.LoadVideoUri -> loadVideo(event.videoUri)
                 is VideoPlayerIntent.SeekTo -> _customUiEvent.emit(VideoPlayerUiEvent.SeekTo(event.position))
                 is VideoPlayerIntent.Pause -> _customUiEvent.emit(VideoPlayerUiEvent.Pause)

@@ -18,6 +18,9 @@ package com.teixeira0x.subtypo.ui.videoplayer.mvi
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 
 sealed class VideoPlayerUiEvent {
+
+    data object SelectVideo : VideoPlayerUiEvent()
+
     data class LoadUri(val videoUri: String) : VideoPlayerUiEvent()
 
     data class LoadSubtitle(val subtitle: Subtitle?) : VideoPlayerUiEvent()
