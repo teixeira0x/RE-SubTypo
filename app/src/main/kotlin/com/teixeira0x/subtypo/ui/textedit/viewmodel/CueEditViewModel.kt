@@ -48,9 +48,6 @@ constructor(
 
     private var subtitle: Subtitle? = null
 
-    val subtitleTimeFormat: String
-        get() = subtitle?.format?.timeFormat ?: "hh:mm:ss,SSS"
-
     fun doIntent(event: CueEditIntent) {
         when (event) {
             is CueEditIntent.LoadCue -> loadCue(event)
@@ -72,7 +69,7 @@ constructor(
             val validationResult =
                 when (event.type) {
                     CueFieldType.START_TIME,
-                    CueFieldType.END_TIME -> cueValidator.checkTime(event.text, subtitleTimeFormat)
+                    CueFieldType.END_TIME -> cueValidator.checkTime(event.text, "hh:mm:ss,SSS")
 
                     CueFieldType.TEXT -> cueValidator.checkText(event.text)
                 }

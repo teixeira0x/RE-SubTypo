@@ -161,14 +161,14 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
             val cue = state.cue
             if (cue != null) {
                 toolbar.title = getString(R.string.subtitle_cue_edit)
-                tieStartTime.setText(cue.startTime.getFormattedTime(viewModel.subtitleTimeFormat))
-                tieEndTime.setText(cue.endTime.getFormattedTime(viewModel.subtitleTimeFormat))
+                tieStartTime.setText(cue.startTime.getFormattedTime())
+                tieEndTime.setText(cue.endTime.getFormattedTime())
                 tieText.setText(cue.text)
             } else {
                 toolbar.title = getString(R.string.subtitle_cue_add)
-                tieStartTime.setText(playerPosition.getFormattedTime(viewModel.subtitleTimeFormat))
+                tieStartTime.setText(playerPosition.getFormattedTime())
                 tieEndTime.setText(
-                    (playerPosition + 2000).getFormattedTime(viewModel.subtitleTimeFormat)
+                    (playerPosition + 2000).getFormattedTime()
                 )
             }
         }
@@ -332,9 +332,9 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
             val savedSelection = selectionStart
             val updatedTime =
                 if (isIncrease) {
-                    text.toString().increaseTime(100, viewModel.subtitleTimeFormat)
+                    text.toString().increaseTime(100)
                 } else {
-                    text.toString().decreaseTime(100, viewModel.subtitleTimeFormat)
+                    text.toString().decreaseTime(100)
                 }
             setText(updatedTime)
             setSelection(savedSelection)

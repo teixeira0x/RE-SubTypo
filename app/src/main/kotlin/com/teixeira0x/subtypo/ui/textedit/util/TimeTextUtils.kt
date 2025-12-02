@@ -19,21 +19,21 @@ import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getFormattedTime
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getMilliseconds
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.isValidTime
 
-fun String.increaseTime(increaseMillis: Long, timeFormat: String): String {
-    if (!isValidTime(this, timeFormat)) {
+fun String.increaseTime(increaseMillis: Long): String {
+    if (!isValidTime(this, "hh:mm:ss,SSS")) {
         return this
     }
 
-    return (this.getMilliseconds() + increaseMillis).getFormattedTime(timeFormat)
+    return (this.getMilliseconds() + increaseMillis).getFormattedTime()
 }
 
-fun String.decreaseTime(decreaseMillis: Long, timeFormat: String): String {
-    if (!isValidTime(this, timeFormat)) {
+fun String.decreaseTime(decreaseMillis: Long): String {
+    if (!isValidTime(this, "hh:mm:ss,SSS")) {
         return this
     }
 
     val millis = this.getMilliseconds() - decreaseMillis
     return if (millis >= 0L) {
-        millis.getFormattedTime(timeFormat)
+        millis.getFormattedTime()
     } else this
 }
