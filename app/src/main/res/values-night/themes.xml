@@ -3,7 +3,7 @@
     <style name="Base.AppTheme" parent="Theme.Material3.DayNight.NoActionBar">
         <item name="aboutLibrariesStyle">@style/AboutLibrariesSubTypoStyle</item>
 
-        <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
+        <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar" tools:ignore="NewApi">false</item>
 
         <item name="chipStyle">@style/Widget.SubTypo.Chip</item>

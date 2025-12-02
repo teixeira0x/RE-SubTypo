@@ -5,7 +5,6 @@ import com.teixeira0x.subtypo.core.subtitle.model.Diagnostic
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.core.subtitle.model.SubtitleData
 import com.teixeira0x.subtypo.core.subtitle.model.SubtitleParseResult
-import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getFormattedTime
 import com.teixeira0x.subtypo.core.subtitle.util.TimeUtils.getMilliseconds
 

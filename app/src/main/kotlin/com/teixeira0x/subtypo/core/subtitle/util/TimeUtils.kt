@@ -18,6 +18,10 @@ object TimeUtils {
         val millis = this % TIME_UNIT_SECOND
 
         return when (format) {
+            "h:mm:ss.cs" -> {
+                val centis = millis / 10
+                String.format("%d:%02d:%02d.%02d", hours, minutes, seconds, centis)
+            }
             "hh:mm:ss,SSS" -> String.format("%02d:%02d:%02d,%03d", hours, minutes, seconds, millis)
             "hh:mm:ss.SSS" -> String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis)
             "mm:ss.SS" -> String.format("%02d:%02d.%02d", minutes, seconds, millis / 10)
@@ -68,6 +72,26 @@ object TimeUtils {
                 (minutes.toLong() * TIME_UNIT_MINUTE) +
                 (seconds * TIME_UNIT_SECOND) +
                 millis
+    }
+
+    fun parseAss(time: String): Long {
+        val parts = time.split(":")
+        if (parts.size != 3) {
+            throw IllegalArgumentException("Invalid ASS time format: $time")
+        }
+        val hours = parts[0].toLong()
+        val minutes = parts[1].toLong()
+        val secParts = parts[2].split(".")
+        if (secParts.size != 2) {
+            throw IllegalArgumentException("Invalid ASS time format: $time")
+        }
+        val seconds = secParts[0].toLong()
+        val centiseconds = secParts[1].toLong()
+
+        return (hours * TIME_UNIT_HOUR) +
+                (minutes * TIME_UNIT_MINUTE) +
+                (seconds * TIME_UNIT_SECOND) +
+                (centiseconds * 10)
     }
 
     /**

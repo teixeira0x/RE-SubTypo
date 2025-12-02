@@ -13,15 +13,5 @@
     <string-array name="translate_languages">
         <item>English</item>
         <item>Portuguese</item>
-        <item>Spanish</item>
-        <item>French</item>
-        <item>German</item>
-        <item>Italian</item>
-        <item>Russian</item>
-        <item>Chinese (Simplified)</item>
-        <item>Japanese</item>
-        <item>Korean</item>
-        <item>Arabic</item>
-        <item>Hindi</item>
     </string-array>
 </resources>

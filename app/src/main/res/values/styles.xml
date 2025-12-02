@@ -71,7 +71,6 @@
     <style name="Widget.SubTypo.ActionMode" parent="Widget.Material3.ActionMode">
         <item name="background">@drawable/shape_toolbar</item>
         <item name="backgroundSplit">?attr/colorOnSurfaceInverse</item>
-        <item name="closeItemLayout">@layout/layout_action_mode_close_item</item>
     </style>
 
     <style name="Widget.SubTypo.BottomAppBar" parent="Widget.MaterialComponents.BottomAppBar">

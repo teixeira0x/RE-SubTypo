@@ -12,13 +12,9 @@
 
     <dimen name="video_picker_sheet_min_height">400dp</dimen>
 
-    <dimen name="chip_group_time_spacing">5dp</dimen>
-    <dimen name="chip_group_albums_spacing">5dp</dimen>
-
     <dimen name="player_view_max_height">350dp</dimen>
     <dimen name="player_controller_padding">8dp</dimen>
     <dimen name="cue_item_padding">8dp</dimen>
-
-    <dimen name="fab_new_project_margin">30dp</dimen>
     <dimen name="fab_add_cue_margin">30dp</dimen>
+    <dimen name="chip_group_albums_spacing">5dp</dimen>
 </resources>
