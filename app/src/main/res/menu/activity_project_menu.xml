@@ -42,6 +42,7 @@
                 android:id="@+id/menu_video_remove_video"
                 android:icon="@drawable/ic_close"
                 android:title="@string/video_menu_remove" />
+
         </menu>
     </item>
 

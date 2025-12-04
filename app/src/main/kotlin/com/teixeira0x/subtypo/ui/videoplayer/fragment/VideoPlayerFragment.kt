@@ -1,5 +1,6 @@
 package com.teixeira0x.subtypo.ui.videoplayer.fragment
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.os.Handler
@@ -94,8 +95,7 @@ class VideoPlayerFragment : Fragment() {
 
         storagePermReq = StoragePermissions(this)
 
-        binding.tvCurrentPosition.setOnClickListener(componentListener)
-        binding.tvDuration.setOnClickListener(componentListener)
+        binding.tvTime.setOnClickListener(componentListener)
         binding.imgSkipBackward.setOnClickListener(componentListener)
         binding.imgPlay.setOnClickListener(componentListener)
         binding.imgSkipForward.setOnClickListener(componentListener)
@@ -252,6 +252,7 @@ class VideoPlayerFragment : Fragment() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateTimeline() {
         val player = player ?: return
 
@@ -259,9 +260,10 @@ class VideoPlayerFragment : Fragment() {
         val currentPosition = player.currentPosition
 
         if (duration == C.TIME_UNSET) {
-            binding.tvDuration.text = "-:-"
+            binding.tvTime.text = "-:-"
         } else {
-            binding.tvDuration.text = duration.getFormattedTime()
+            binding.tvTime.text =
+                "${currentPosition.getFormattedTime()}|${duration.getFormattedTime()}"
 
             binding.timelineView.setDuration(duration)
             binding.timelineView.setPosition(currentPosition)
@@ -324,8 +326,17 @@ class VideoPlayerFragment : Fragment() {
         private var seekProgress = 0
 
         override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
-            binding.tvCurrentPosition.text = progress.toLong().getFormattedTime()
-            seekProgress = progress
+            val player = player ?: return
+
+            val duration = player.duration
+
+            binding.tvTime.text = if (duration == C.TIME_UNSET) {
+                "-:-"
+            } else {
+                seekProgress = progress
+
+                "${progress.toLong().getFormattedTime()}|${duration.getFormattedTime()}"
+            }
         }
 
         override fun onStartTrackingTouch(seekBar: SeekBar) {
@@ -340,10 +351,8 @@ class VideoPlayerFragment : Fragment() {
 
         override fun onClick(view: View) {
             when (view.id) {
-                binding.tvCurrentPosition.id ->
-                    ClipboardUtils.copyText(binding.tvCurrentPosition.text.toString())
-
-                binding.tvDuration.id -> ClipboardUtils.copyText(binding.tvDuration.text.toString())
+                binding.tvTime.id ->
+                    ClipboardUtils.copyText(binding.tvTime.text.toString().substringBeforeLast("|"))
 
                 binding.imgSkipBackward.id -> player?.seekBack()
                 binding.imgPlay.id -> {

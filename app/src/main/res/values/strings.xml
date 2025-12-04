@@ -87,6 +87,8 @@
     <string name="video_menu">Video</string>
     <string name="video_menu_remove">Remove video</string>
     <string name="player_playback_speed">Playback speed</string>
+    <string name="player_show">Show Player</string>
+    <string name="player_hide">Hide Player</string>
 
     <!-- About -->
     <string name="about_title">About</string>

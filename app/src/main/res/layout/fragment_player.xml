@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -37,105 +38,94 @@
         app:layout_constraintStart_toStartOf="parent">
 
 
-        <LinearLayout
-            android:id="@+id/ll_timeline"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/margin_small"
             android:orientation="vertical">
 
-            <LinearLayout
+            <SeekBar
+                android:id="@+id/seek_bar"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/margin_small"
+                android:paddingHorizontal="0dp" />
+
+            <LinearLayout
+                android:id="@+id/ll_timeline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/seek_bar"
                 android:gravity="center_vertical">
 
-                <TextView
-                    android:id="@+id/tv_current_position"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textColor="?attr/colorSecondaryVariant"
-                    android:textSize="14sp" />
 
-                <SeekBar
-                    android:id="@+id/seek_bar"
+                <TextView
+                    android:id="@+id/tv_time"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1.0" />
+                    android:layout_weight="1"
+                    android:textColor="?attr/colorSecondaryVariant"
+                    android:textSize="14sp"
+                    tools:text="00:00:00,000|00:04:00,000" />
 
-                <TextView
-                    android:id="@+id/tv_duration"
+                <ImageView
+                    android:id="@+id/img_player_visibility"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="?attr/colorSecondaryVariant"
-                    android:textSize="14sp" />
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/description_player_visibility"
+                    android:padding="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_video_off" />
+
+                <ImageView
+                    android:id="@+id/img_playback_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/player_playback_speed"
+                    android:padding="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_speedometer" />
+
+                <ImageView
+                    android:id="@+id/img_skip_backward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/description_player_seek_backward"
+                    android:padding="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_skip_backward" />
+
+
+                <ImageView
+                    android:id="@+id/img_play"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/description_player_play_or_pause"
+                    android:padding="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_play" />
+
+                <ImageView
+                    android:id="@+id/img_skip_forward"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/description_player_seek_forward"
+                    android:padding="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_skip_forward" />
 
             </LinearLayout>
 
             <com.teixeira0x.subtypo.core.ui.view.TimelineView
                 android:id="@+id/timeline_view"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp" />
-        </LinearLayout>
+                android:layout_height="20dp"
+                android:layout_below="@id/ll_timeline" />
 
-        <ImageView
-            android:id="@+id/img_player_visibility"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_timeline"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/description_player_visibility"
-            android:padding="@dimen/padding_small"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_video_off" />
-
-
-        <ImageView
-            android:id="@+id/img_skip_backward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_timeline"
-            android:layout_toStartOf="@id/img_play"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/description_player_seek_backward"
-            android:padding="@dimen/padding_small"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_skip_backward" />
-
-        <ImageView
-            android:id="@+id/img_skip_forward"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_timeline"
-            android:layout_toEndOf="@id/img_play"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/description_player_seek_forward"
-            android:padding="@dimen/padding_small"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_skip_forward" />
-
-        <ImageView
-            android:id="@+id/img_play"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_timeline"
-            android:layout_centerHorizontal="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/description_player_play_or_pause"
-            android:padding="@dimen/padding_small"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_play" />
-
-        <ImageView
-            android:id="@+id/img_playback_speed"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/ll_timeline"
-            android:layout_alignParentEnd="true"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="@string/player_playback_speed"
-            android:padding="@dimen/padding_small"
-            android:scaleType="fitCenter"
-            android:src="@drawable/ic_speedometer" />
+        </RelativeLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
