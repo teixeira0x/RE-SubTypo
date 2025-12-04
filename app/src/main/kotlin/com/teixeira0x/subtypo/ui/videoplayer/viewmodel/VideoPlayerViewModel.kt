@@ -19,7 +19,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
+import com.teixeira0x.subtypo.core.subtitle.model.Cue
 import com.teixeira0x.subtypo.ui.videoplayer.model.ExoCuesTimed
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
@@ -42,9 +42,6 @@ class VideoPlayerViewModel : ViewModel() {
     val playerPosition: LiveData<Long>
         get() = _playerPosition
 
-    var subtitle: Subtitle? = null
-        private set
-
     var currentExoCuesTimed: List<ExoCuesTimed>? = null
         private set
 
@@ -55,7 +52,6 @@ class VideoPlayerViewModel : ViewModel() {
         viewModelScope.launch {
             when (event) {
                 is VideoPlayerIntent.SelectVideo -> _customUiEvent.emit(VideoPlayerUiEvent.SelectVideo)
-                is VideoPlayerIntent.LoadVideoUri -> loadVideo(event.videoUri)
                 is VideoPlayerIntent.SeekTo -> _customUiEvent.emit(VideoPlayerUiEvent.SeekTo(event.position))
                 is VideoPlayerIntent.Pause -> _customUiEvent.emit(VideoPlayerUiEvent.Pause)
                 is VideoPlayerIntent.Play -> _customUiEvent.emit(VideoPlayerUiEvent.Play)
@@ -63,19 +59,16 @@ class VideoPlayerViewModel : ViewModel() {
         }
     }
 
-    private fun loadVideo(videoUri: String) {
+    fun loadVideo(videoUri: String) {
         viewModelScope.launch {
             _videoPath.postValue(videoUri)
             _customUiEvent.emit(VideoPlayerUiEvent.LoadUri(videoUri))
         }
     }
 
-    fun setSubtitle(subtitle: Subtitle?) {
+    fun setCues(cues: List<Cue>) {
         viewModelScope.launch {
-            this@VideoPlayerViewModel.subtitle = subtitle
-            this@VideoPlayerViewModel.currentExoCuesTimed = SubtitleUtils.getExoCuesTimed(subtitle)
-
-            _customUiEvent.emit(VideoPlayerUiEvent.LoadSubtitle(subtitle))
+            this@VideoPlayerViewModel.currentExoCuesTimed = SubtitleUtils.getExoCuesTimed(cues)
         }
     }
 
@@ -84,6 +77,14 @@ class VideoPlayerViewModel : ViewModel() {
             this@VideoPlayerViewModel.isPlayerVisible = visible
             _customUiEvent.emit(VideoPlayerUiEvent.Visibility(visible))
         }
+    }
+
+    fun pause() = viewModelScope.launch {
+        _customUiEvent.emit(VideoPlayerUiEvent.Pause)
+    }
+
+    fun seekTo(position: Long) = viewModelScope.launch {
+        _customUiEvent.emit(VideoPlayerUiEvent.SeekTo(position))
     }
 
     fun updatePlayerPosition(position: Long) {

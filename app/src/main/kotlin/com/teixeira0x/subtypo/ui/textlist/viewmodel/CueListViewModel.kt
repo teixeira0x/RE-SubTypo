@@ -21,93 +21,104 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.teixeira0x.subtypo.core.subtitle.format.SubtitleFormat
 import com.teixeira0x.subtypo.core.subtitle.model.Cue
-import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
+import com.teixeira0x.subtypo.ui.textlist.model.SimpleSubtitleData
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiEvent
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableSharedFlow
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharedFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class CueListViewModel
-@Inject
-constructor() : ViewModel() {
+class CueListViewModel @Inject constructor() : ViewModel() {
 
     companion object {
         private val cueTimeComparator =
             Comparator<Cue> { c1, c2 -> c1.startTime.compareTo(c2.startTime) }
     }
 
-    private val _cueListUiState =
-        MutableStateFlow<CueListUiState>(CueListUiState.Loaded(emptyList()))
-    val cueListUiState: StateFlow<CueListUiState>
-        get() = _cueListUiState.asStateFlow()
-
-    private val _playerPosition = MutableLiveData(0L)
-    val playerPosition: LiveData<Long> = _playerPosition
     private val _customUiEvent = MutableSharedFlow<CueListUiEvent>()
     val customUiEvent: SharedFlow<CueListUiEvent> = _customUiEvent.asSharedFlow()
 
-    private val subtitleLive = MutableLiveData(Subtitle("subtitle", SubtitleFormat.of(".srt")))
-    val subtitle: Subtitle
-        get() = subtitleLive.value!!
+    private val _subtitleData =
+        MutableLiveData(SimpleSubtitleData("subtitle", SubtitleFormat.of(".srt")))
 
-    fun doIntent(intent: CueListIntent) {
-        when (intent) {
-            is CueListIntent.LoadSubtitle -> loadSubtitle(intent)
-            is CueListIntent.ScrollTo -> scrollTo(intent)
-            is CueListIntent.SortCueListByTime -> sortCueListByTime()
-            is CueListIntent.PlayerPause -> playerPause()
-            is CueListIntent.PlayerSeekTo -> playerSeekTo(intent)
-        }
-    }
+    val subtitleName: String
+        get() = _subtitleData.value!!.name
+    val subtitleFormat: SubtitleFormat
+        get() = _subtitleData.value!!.format
+    val subtitleExtras: Map<String, String>?
+        get() = _subtitleData.value!!.extras
 
-    private fun loadSubtitle(intent: CueListIntent.LoadSubtitle) {
-        _cueListUiState.value = CueListUiState.Loading
+    private val _cues = MutableLiveData(listOf<Cue>())
+
+    val cues: LiveData<List<Cue>>
+        get() = _cues
+
+    fun loadSubtitle(
+        name: String, format: SubtitleFormat, cues: List<Cue>, extras: Map<String, String>? = null
+    ) {
         viewModelScope.launch {
-            subtitleLive.value = intent.subtitle
-            _cueListUiState.value = CueListUiState.Loaded(intent.subtitle.data.cues)
-
-            _customUiEvent.emit(CueListUiEvent.PlayerUpdateSubtitle(intent.subtitle))
-
-            if (intent.updateSourceView) {
-                _customUiEvent.emit(CueListUiEvent.UpdateSourceView(intent.subtitle))
-            }
+            _subtitleData.value = _subtitleData.value!!.copy(
+                name = name, format = format, extras = extras
+            )
+            _cues.value = cues
         }
     }
 
-    private fun scrollTo(intent: CueListIntent.ScrollTo) {
-        viewModelScope.launch { _customUiEvent.emit(CueListUiEvent.ScrollTo(intent.index)) }
-    }
 
-    private fun sortCueListByTime() {
+    fun sortCueListByTime() {
         viewModelScope.launch {
-            val subtitle = this@CueListViewModel.subtitle
-
-            val data =
-                subtitle.data.copy(cues = subtitle.data.cues.sortedWith(cueTimeComparator))
-
-            _cueListUiState.value = CueListUiState.Loaded(data.cues)
-
+            val cues = _cues.value!!.toMutableList()
+            cues.sortWith(cueTimeComparator)
+            _cues.value = cues
         }
     }
 
-    private fun playerPause() {
-        viewModelScope.launch { _customUiEvent.emit(CueListUiEvent.PlayerPause) }
+    fun scrollTo(index: Int) {
+        viewModelScope.launch { _customUiEvent.emit(CueListUiEvent.ScrollTo(index)) }
     }
 
-    private fun playerSeekTo(intent: CueListIntent.PlayerSeekTo) {
-        viewModelScope.launch { _customUiEvent.emit(CueListUiEvent.PlayerSeekTo(intent.position)) }
+    fun setSubtitleName(name: String) = viewModelScope.launch {
+        _subtitleData.value = _subtitleData.value!!.copy(
+            name = name,
+        )
     }
 
-    fun updatePlayerPosition(position: Long) {
-        _playerPosition.value = position
+    fun setSubtitleFormat(format: SubtitleFormat) {
+        _subtitleData.value = _subtitleData.value!!.copy(
+            format = format,
+        )
+    }
+
+    fun setCues(cues: List<Cue>) = viewModelScope.launch {
+
+        _cues.value = cues
+    }
+
+    fun addCue(index: Int, cue: Cue) {
+        viewModelScope.launch {
+            val cues = _cues.value!!.toMutableList()
+            cues.add(index, cue)
+            _cues.value = cues
+        }
+    }
+
+    fun setCue(index: Int, cue: Cue) {
+        viewModelScope.launch {
+            val cues = _cues.value!!.toMutableList()
+            cues[index] = cue
+            _cues.value = cues
+        }
+    }
+
+    fun removeCue(index: Int) {
+        viewModelScope.launch {
+            val cues = _cues.value!!.toMutableList()
+            cues.removeAt(index = index)
+            _cues.value = cues
+        }
     }
 }
+

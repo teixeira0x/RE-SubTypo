@@ -15,17 +15,7 @@
 
 package com.teixeira0x.subtypo.ui.textlist.mvi
 
-import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
-
 sealed class CueListUiEvent {
 
     data class ScrollTo(val index: Int) : CueListUiEvent()
-
-    data class PlayerUpdateSubtitle(val subtitle: Subtitle) : CueListUiEvent()
-
-    data class UpdateSourceView(val subtitle: Subtitle) : CueListUiEvent()
-
-    data object PlayerPause : CueListUiEvent()
-
-    data class PlayerSeekTo(val position: Long) : CueListUiEvent()
 }

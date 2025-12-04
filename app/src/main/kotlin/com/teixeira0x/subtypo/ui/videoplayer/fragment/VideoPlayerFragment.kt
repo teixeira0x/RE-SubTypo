@@ -36,8 +36,8 @@ import com.teixeira0x.subtypo.core.ui.permission.StoragePermissions
 import com.teixeira0x.subtypo.databinding.FragmentPlayerBinding
 import com.teixeira0x.subtypo.ui.optionlist.dialog.showOptionListDialog
 import com.teixeira0x.subtypo.ui.optionlist.model.OptionItem
+import com.teixeira0x.subtypo.ui.textlist.viewmodel.CueListViewModel
 import com.teixeira0x.subtypo.ui.videopicker.fragment.VideoPickerSheetFragment
-import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
 import com.teixeira0x.subtypo.ui.videoplayer.util.PlayerErrorMessageProvider
 import com.teixeira0x.subtypo.ui.videoplayer.viewmodel.VideoPlayerViewModel
@@ -58,6 +58,7 @@ class VideoPlayerFragment : Fragment() {
     }
 
     private val mainHandler = Handler(Looper.getMainLooper())
+    private val cueListViewModel by activityViewModels<CueListViewModel>()
     private val viewModel by activityViewModels<VideoPlayerViewModel>()
 
     private var _binding: FragmentPlayerBinding? = null
@@ -119,7 +120,7 @@ class VideoPlayerFragment : Fragment() {
                         .show()
                     return@newSingleChoice
                 }
-                viewModel.doEvent(VideoPlayerIntent.LoadVideoUri(video.path))
+                viewModel.loadVideo(video.path)
             }.show(childFragmentManager, "VideoPickerSheetFragment")
         }
     }
@@ -149,15 +150,18 @@ class VideoPlayerFragment : Fragment() {
                     is VideoPlayerUiEvent.SelectVideo -> selectVideo()
                     is VideoPlayerUiEvent.LoadUri -> prepareMedia(event.videoUri)
 
-                    is VideoPlayerUiEvent.LoadSubtitle -> updateProgress()
                     is VideoPlayerUiEvent.Visibility -> updatePlayerVisibility(event.visible)
                     is VideoPlayerUiEvent.SeekTo -> player?.seekTo(event.position)
                     is VideoPlayerUiEvent.Pause -> pausePlayer()
                     is VideoPlayerUiEvent.Play -> playPlayer()
-                    else -> Unit
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
+
+        cueListViewModel.cues.observe(this) {
+            viewModel.setCues(it)
+            updateProgress()
+        }
     }
 
 
@@ -239,7 +243,7 @@ class VideoPlayerFragment : Fragment() {
             }
         }
 
-        binding.timelineView.setSubtitles(viewModel.subtitle?.data?.cues ?: emptyList())
+        binding.timelineView.setSubtitles(cueListViewModel.cues.value!!)
         binding.playerView.subtitleView?.setCues(showingExoCues)
         updateTimeline()
 

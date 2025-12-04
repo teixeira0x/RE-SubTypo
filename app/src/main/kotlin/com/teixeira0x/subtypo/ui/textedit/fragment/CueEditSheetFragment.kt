@@ -43,7 +43,6 @@ import com.teixeira0x.subtypo.ui.textedit.util.CueFieldType
 import com.teixeira0x.subtypo.ui.textedit.util.decreaseTime
 import com.teixeira0x.subtypo.ui.textedit.util.increaseTime
 import com.teixeira0x.subtypo.ui.textedit.viewmodel.CueEditViewModel
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
 import com.teixeira0x.subtypo.ui.textlist.viewmodel.CueListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
@@ -103,7 +102,7 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
         observeViewModel()
         configureUI()
 
-        viewModel.doIntent(CueEditIntent.LoadCue(cueListViewModel.subtitle, cueIndex = cueIndex))
+        viewModel.doIntent(CueEditIntent.LoadCue(cueIndex = cueIndex))
     }
 
     override fun onStart() {
@@ -137,12 +136,8 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { event ->
                 when (event) {
-                    is CueEditUiEvent.CueInserted ->
-                        cueListViewModel.doIntent(CueListIntent.ScrollTo(event.index))
-
-                    is CueEditUiEvent.CueUpdated ->
-                        cueListViewModel.doIntent(CueListIntent.ScrollTo(event.index))
-
+                    is CueEditUiEvent.CueInserted -> cueListViewModel.scrollTo(event.index)
+                    is CueEditUiEvent.CueUpdated -> cueListViewModel.scrollTo(event.index)
                     is CueEditUiEvent.ShowProgress -> showProgress(event.message)
                     is CueEditUiEvent.DismissProgress -> dismissProgress()
                     is CueEditUiEvent.Dismiss -> {
@@ -158,7 +153,7 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
 
     private fun onCueLoaded(state: CueEditUiState.Loaded) {
         binding.apply {
-            val cue = state.cue
+            val cue = cueListViewModel.cues.value!!.getOrNull(state.cueIndex)
             if (cue != null) {
                 toolbar.title = getString(R.string.subtitle_cue_edit)
                 tieStartTime.setText(cue.startTime.getFormattedTime())
@@ -223,9 +218,7 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
                 val endTime = binding.tieEndTime.text.toString().getMilliseconds()
                 val text = binding.tieText.text.toString().trim()
 
-                val subtitle = cueListViewModel.subtitle
-
-                val cues = subtitle.data.cues.toMutableList()
+                val cues = cueListViewModel.cues.value!!
                 val index =
                     cues
                         .indexOfLast { playerPosition >= it.startTime }
@@ -233,16 +226,17 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
                         ?.plus(1) ?: 0
 
                 if (cueIndex >= 0) {
-
-                    cues[cueIndex] = Cue(
-                        startTime = startTime,
-                        endTime = endTime,
-                        text = text
+                    cueListViewModel.setCue(
+                        cueIndex,
+                        Cue(
+                            startTime = startTime,
+                            endTime = endTime,
+                            text = text
+                        )
                     )
-
-                    cueListViewModel.doIntent(CueListIntent.ScrollTo(cueIndex))
+                    cueListViewModel.scrollTo(cueIndex)
                 } else {
-                    cues.add(
+                    cueListViewModel.addCue(
                         index,
                         Cue(
                             startTime = startTime,
@@ -251,17 +245,8 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
                         ),
                     )
 
-                    cueListViewModel.doIntent(CueListIntent.ScrollTo(index))
+                    cueListViewModel.scrollTo(index)
                 }
-
-                val data = subtitle.data.copy(cues = cues)
-
-                cueListViewModel.doIntent(
-                    CueListIntent.LoadSubtitle(
-                        subtitle.copy(data = data)
-                    )
-                )
-
                 dismiss()
             }
 
@@ -279,17 +264,7 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
                     title = R.string.remove,
                     message = R.string.subtitle_cue_remove_msg,
                 ) { _, _ ->
-                    val cues = cueListViewModel.subtitle.data.cues.toMutableList()
-                    cues.removeAt(cueIndex)
-
-                    cueListViewModel.doIntent(
-                        CueListIntent.LoadSubtitle(
-                            cueListViewModel.subtitle.copy(
-                                data = cueListViewModel.subtitle.data.copy(cues = cues)
-                            )
-                        )
-                    )
-
+                    cueListViewModel.removeCue(cueIndex)
                     dismiss()
                 }
                 true

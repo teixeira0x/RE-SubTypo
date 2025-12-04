@@ -4,8 +4,6 @@ sealed class VideoPlayerIntent {
 
     data object SelectVideo : VideoPlayerIntent()
 
-    data class LoadVideoUri(val videoUri: String) : VideoPlayerIntent()
-
     data class SeekTo(val position: Long) : VideoPlayerIntent()
 
     data object Pause : VideoPlayerIntent()

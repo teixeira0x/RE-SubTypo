@@ -22,6 +22,7 @@ object TimeUtils {
                 val centis = millis / 10
                 String.format("%d:%02d:%02d.%02d", hours, minutes, seconds, centis)
             }
+
             "hh:mm:ss,SSS" -> String.format("%02d:%02d:%02d,%03d", hours, minutes, seconds, millis)
             "hh:mm:ss.SSS" -> String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis)
             "mm:ss.SS" -> String.format("%02d:%02d.%02d", minutes, seconds, millis / 10)

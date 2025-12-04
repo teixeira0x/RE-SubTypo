@@ -36,18 +36,18 @@ import com.teixeira0x.subtypo.ui.textedit.fragment.CueEditSheetFragment
 import com.teixeira0x.subtypo.ui.textlist.adapter.CueClickListener
 import com.teixeira0x.subtypo.ui.textlist.adapter.CueListAdapter
 import com.teixeira0x.subtypo.ui.textlist.adapter.CueTimeClickListener
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
 import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiEvent
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiState
 import com.teixeira0x.subtypo.ui.textlist.viewmodel.CueListViewModel
+import com.teixeira0x.subtypo.ui.videoplayer.viewmodel.VideoPlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class CueListFragment : Fragment(), CueClickListener, CueTimeClickListener {
+    private val cueListViewModel by activityViewModels<CueListViewModel>()
+    private val playerViewModel by activityViewModels<VideoPlayerViewModel>()
 
-    private val viewModel by activityViewModels<CueListViewModel>()
     private var _binding: FragmentCueListBinding? = null
     private val binding: FragmentCueListBinding
         get() = checkNotNull(_binding) { "CueListFragment has been destroyed!" }
@@ -80,48 +80,33 @@ class CueListFragment : Fragment(), CueClickListener, CueTimeClickListener {
     }
 
     private fun observeViewModel() {
-        viewModel.cueListUiState
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { state ->
-                when (state) {
-                    is CueListUiState.Loading -> onLoadingChange(true)
-                    is CueListUiState.Loaded -> {
-                        cuesAdapter.submitList(state.cues)
-                        onLoadingChange(false)
-                    }
-                }
-            }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
-
-        viewModel.customUiEvent
+        cueListViewModel.customUiEvent
             .flowWithLifecycle(viewLifecycleOwner.lifecycle)
             .onEach { event ->
                 when (event) {
                     is CueListUiEvent.ScrollTo -> binding.rvCues.scrollToPosition(event.index)
-                    else -> Unit
                 }
             }
             .launchIn(viewLifecycleOwner.lifecycleScope)
 
-        viewModel.playerPosition.observe(this) { position ->
+        playerViewModel.playerPosition.observe(this) { position ->
             cuesAdapter.updateVisibleCues(position)
+        }
+
+        cueListViewModel.cues.observe(this) { cues ->
+            binding.tvCuesEmpty.isVisible = cues.isEmpty()
+            binding.rvCues.isVisible = cues.isNotEmpty()
+            cuesAdapter.submitList(cues)
         }
     }
 
-    private fun onLoadingChange(isLoading: Boolean) {
-        binding.progressIndicator.isVisible = isLoading
-        binding.tvCuesEmpty.isVisible = !isLoading && cuesAdapter.cues.isEmpty()
-        binding.rvCues.isVisible = !isLoading
-    }
-
     private fun showCueEditSheet(cueIndex: Int = -1) {
-        viewModel.doIntent(CueListIntent.PlayerPause)
-
+        playerViewModel.pause()
         // Create the fragment with a delay to wait for the video to pause.
         handler.postDelayed(
             Runnable {
                 CueEditSheetFragment.newInstance(
-                    playerPosition = viewModel.playerPosition.value ?: 0L,
+                    playerPosition = playerViewModel.playerPosition.value ?: 0L,
                     cueIndex = cueIndex,
                 )
                     .show(childFragmentManager, "CueEditSheetFragment")
@@ -133,7 +118,7 @@ class CueListFragment : Fragment(), CueClickListener, CueTimeClickListener {
     private fun configureUI() {
         binding.fabAddCue.setOnClickListener { showCueEditSheet() }
         binding.bottomAppBar.apply {
-            setNavigationOnClickListener { viewModel.doIntent(CueListIntent.SortCueListByTime) }
+            setNavigationOnClickListener { cueListViewModel.sortCueListByTime() }
         }
 
         binding.rvCues.layoutManager = LinearLayoutManager(requireContext())
@@ -165,10 +150,10 @@ class CueListFragment : Fragment(), CueClickListener, CueTimeClickListener {
     }
 
     override fun onCueStartTimeClick(startTime: Long) {
-        viewModel.doIntent(CueListIntent.PlayerSeekTo(startTime))
+        playerViewModel.seekTo(startTime)
     }
 
     override fun onCueEndTimeClick(endTime: Long) {
-        viewModel.doIntent(CueListIntent.PlayerSeekTo(endTime))
+        playerViewModel.seekTo(endTime)
     }
 }

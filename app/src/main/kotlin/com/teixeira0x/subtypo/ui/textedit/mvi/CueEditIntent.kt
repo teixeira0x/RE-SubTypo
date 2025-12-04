@@ -15,12 +15,12 @@
 
 package com.teixeira0x.subtypo.ui.textedit.mvi
 
-import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.ui.textedit.util.CueFieldType
 
 sealed class CueEditIntent {
-
-    data class LoadCue(val subtitle: Subtitle, val cueIndex: Int) : CueEditIntent()
+    data class LoadCue(
+        val cueIndex: Int
+    ) : CueEditIntent()
 
     data class ValidateCueField(val type: CueFieldType, val text: String) : CueEditIntent()
 }

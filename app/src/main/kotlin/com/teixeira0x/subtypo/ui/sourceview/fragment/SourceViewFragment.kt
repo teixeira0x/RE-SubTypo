@@ -1,3 +1,18 @@
+/*
+ * This file is part of SubTypo.
+ *
+ * SubTypo is free software: you can redistribute it and/or modify it under the terms of
+ * the GNU General Public License as published by the Free Software Foundation, either version 3 of
+ * the License, or (at your option) any later version.
+ *
+ * SubTypo is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY;
+ * without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License along with SubTypo.
+ * If not, see <https://www.gnu.org/licenses/>.
+ */
+
 package com.teixeira0x.subtypo.ui.sourceview.fragment
 
 import android.os.Bundle
@@ -12,21 +27,16 @@ import androidx.core.view.updatePaddingRelative
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
-import com.teixeira0x.subtypo.core.subtitle.format.SubtitleFormat
 import com.teixeira0x.subtypo.core.subtitle.util.containsErrors
 import com.teixeira0x.subtypo.databinding.FragmentSourceTextBinding
-import com.teixeira0x.subtypo.ui.sourceview.viewmodel.SourceViewViewModel
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
+import com.teixeira0x.subtypo.ui.sourceview.viewmodel.SourceViewModel
 import com.teixeira0x.subtypo.ui.textlist.viewmodel.CueListViewModel
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 
 class SourceViewFragment : Fragment() {
-    private val viewModel by activityViewModels<SourceViewViewModel>()
-    private val cueLIstViewModel by activityViewModels<CueListViewModel>()
+    private val cueListViewModel by activityViewModels<CueListViewModel>()
+    private val sourceViewModel by activityViewModels<SourceViewModel>()
     private var _binding: FragmentSourceTextBinding? = null
 
     private val binding: FragmentSourceTextBinding
@@ -35,6 +45,8 @@ class SourceViewFragment : Fragment() {
     private val mainHandler = Handler(Looper.getMainLooper())
     private var textChangeAction: Runnable? = null
     private var insets: Insets? = null
+
+    private var isVisible = false
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
@@ -46,19 +58,17 @@ class SourceViewFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         textChangeAction = Runnable { onTextChangeAction() }
 
-        viewModel.sourceTextUiState.flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { event ->
-                if (event.isFromUi) return@onEach
-
-                binding.editor.setText(event.text)
-            }.launchIn(viewLifecycleOwner.lifecycleScope)
+        sourceViewModel.subtitle.observe(this) {
+            binding.editor.setText(it.toText())
+        }
 
         binding.editor.addTextChangedListener { editable ->
-            textChangeAction?.let { mainHandler.removeCallbacks(it) }
-            textChangeAction?.let { mainHandler.postDelayed(it, 500) }
+            if (isVisible) {
+                textChangeAction?.let { mainHandler.removeCallbacks(it) }
+                textChangeAction?.let { mainHandler.postDelayed(it, 500) }
+            }
         }
     }
-
 
     override fun onDestroyView() {
         super.onDestroyView()
@@ -84,23 +94,19 @@ class SourceViewFragment : Fragment() {
 
     private fun onTextChangeAction() {
         lifecycleScope.launch {
-            val subtitle = cueLIstViewModel.subtitle
+            val subtitle = sourceViewModel.subtitle.value!!
 
-            val (subtitleFormat, parseResult) = SubtitleFormat.of(
-                subtitle.format.extension, binding.editor.text.toString()
-            )
+            val result = subtitle.format.parseText(binding.editor.text.toString())
 
-            if (parseResult.diagnostics.containsErrors()) {
+            if (result.diagnostics.containsErrors()) {
                 return@launch
             }
 
-            cueLIstViewModel.doIntent(
-                CueListIntent.LoadSubtitle(
-                    subtitle.copy(
-                        format = subtitleFormat, data = parseResult.data
-                    ), false
-                )
-            )
+            cueListViewModel.setCues(result.data.cues)
         }
+    }
+
+    fun onVisibilityToggle(isVisible: Boolean) {
+        this.isVisible = isVisible
     }
 }

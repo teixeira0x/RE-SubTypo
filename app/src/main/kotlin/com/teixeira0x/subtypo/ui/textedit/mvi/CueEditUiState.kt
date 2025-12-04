@@ -15,12 +15,10 @@
 
 package com.teixeira0x.subtypo.ui.textedit.mvi
 
-import com.teixeira0x.subtypo.core.subtitle.model.Cue
-
 sealed class CueEditUiState {
     object Loading : CueEditUiState()
 
-    class Loaded(val cue: Cue?) : CueEditUiState()
+    class Loaded(val cueIndex: Int) : CueEditUiState()
 
     class Error(val message: Int) : CueEditUiState()
 }

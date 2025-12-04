@@ -19,7 +19,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
 import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditIntent
 import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditUiEvent
 import com.teixeira0x.subtypo.ui.textedit.mvi.CueEditUiState
@@ -46,8 +45,6 @@ constructor(
     private val _customUiEvent = MutableSharedFlow<CueEditUiEvent>()
     val customUiEvent: SharedFlow<CueEditUiEvent> = _customUiEvent.asSharedFlow()
 
-    private var subtitle: Subtitle? = null
-
     fun doIntent(event: CueEditIntent) {
         when (event) {
             is CueEditIntent.LoadCue -> loadCue(event)
@@ -58,9 +55,8 @@ constructor(
     private fun loadCue(event: CueEditIntent.LoadCue) {
         _cueEditUiState.value = CueEditUiState.Loading
         viewModelScope.launch {
-            subtitle = event.subtitle
             _cueEditUiState.value =
-                CueEditUiState.Loaded(event.subtitle.data.cues.getOrNull(event.cueIndex))
+                CueEditUiState.Loaded(event.cueIndex)
         }
     }
 

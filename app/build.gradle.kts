@@ -13,8 +13,6 @@ plugins {
     alias(libs.plugins.util.aboutlibraries)
 }
 
-
-
 android {
     namespace = BuildConfig.packageName
 

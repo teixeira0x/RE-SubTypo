@@ -11,14 +11,6 @@
         android:clipToPadding="false"
         android:paddingBottom="?attr/actionBarSize" />
 
-    <com.google.android.material.progressindicator.CircularProgressIndicator
-        android:id="@+id/progress_indicator"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="70dp"
-        android:indeterminate="true" />
-
     <com.google.android.material.textview.MaterialTextView
         android:id="@+id/tv_cues_empty"
         android:layout_width="wrap_content"

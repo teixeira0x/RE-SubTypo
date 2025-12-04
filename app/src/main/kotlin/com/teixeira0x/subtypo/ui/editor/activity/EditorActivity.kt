@@ -16,13 +16,12 @@ import androidx.core.graphics.Insets
 import androidx.core.view.isVisible
 import androidx.core.view.updatePadding
 import androidx.core.view.updatePaddingRelative
-import androidx.lifecycle.flowWithLifecycle
-import androidx.lifecycle.lifecycleScope
 import com.teixeira0x.subtypo.R
 import com.teixeira0x.subtypo.core.preference.PreferencesManager
 import com.teixeira0x.subtypo.core.preference.PreferencesManager.KEY_APPEARANCE_AMOLED
 import com.teixeira0x.subtypo.core.subtitle.format.SubtitleFormat
 import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
+import com.teixeira0x.subtypo.core.subtitle.model.SubtitleData
 import com.teixeira0x.subtypo.core.ui.base.BaseEdgeToEdgeActivity
 import com.teixeira0x.subtypo.core.ui.util.getFileName
 import com.teixeira0x.subtypo.core.ui.util.readFile
@@ -33,19 +32,14 @@ import com.teixeira0x.subtypo.ui.optionlist.dialog.showOptionListDialog
 import com.teixeira0x.subtypo.ui.optionlist.model.OptionItem
 import com.teixeira0x.subtypo.ui.preference.SettingsActivity
 import com.teixeira0x.subtypo.ui.sourceview.fragment.SourceViewFragment
-import com.teixeira0x.subtypo.ui.sourceview.mvp.SourceViewIntent
-import com.teixeira0x.subtypo.ui.sourceview.viewmodel.SourceViewViewModel
+import com.teixeira0x.subtypo.ui.sourceview.viewmodel.SourceViewModel
 import com.teixeira0x.subtypo.ui.textlist.fragment.CueListFragment
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListIntent
-import com.teixeira0x.subtypo.ui.textlist.mvi.CueListUiEvent
 import com.teixeira0x.subtypo.ui.textlist.viewmodel.CueListViewModel
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerIntent
 import com.teixeira0x.subtypo.ui.videoplayer.viewmodel.VideoPlayerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.launchIn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -56,8 +50,7 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
 
     private val videoPlayerViewModel by viewModels<VideoPlayerViewModel>()
     private val cueListViewModel by viewModels<CueListViewModel>()
-
-    private val sourceTextViewModel by viewModels<SourceViewViewModel>()
+    private val sourceViewModel by viewModels<SourceViewModel>()
 
     private val openSubtitleFileLauncher =
         registerForActivityResult(ActivityResultContracts.GetContent()) {
@@ -92,9 +85,9 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
             onBackPressedDispatcher.onBackPressed()
         }
 
-
-        observeViewModel()
-
+//        scope.launch(Dispatchers.IO) {
+//            loadBackup()
+//        }
 
     }
 
@@ -117,15 +110,11 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
         when (item.itemId) {
             R.id.menu_open_subtitle -> openSubtitleFileLauncher.launch("*/*")
             R.id.menu_save_subtitle, R.id.menu_save_as_subtitle -> saveSubtitleLauncher.launch(
-                cueListViewModel.subtitle.name + cueListViewModel.subtitle.format.extension
+                cueListViewModel.subtitleName + cueListViewModel.subtitleFormat.extension
             )
 
             R.id.menu_video_select_video -> videoPlayerViewModel.doEvent(VideoPlayerIntent.SelectVideo)
-            R.id.menu_video_remove_video -> videoPlayerViewModel.doEvent(
-                VideoPlayerIntent.LoadVideoUri(
-                    ""
-                )
-            )
+            R.id.menu_video_remove_video -> videoPlayerViewModel.loadVideo("")
 
             R.id.menu_subtitle_format -> {
                 val allFormatsOptions = SubtitleFormat.allSubtitleFormats.map {
@@ -136,19 +125,31 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
 
                 showOptionListDialog(
                     this, getString(R.string.subtitle_select_format), allFormatsOptions
-                ) { pos, item ->
-                    cueListViewModel.doIntent(
-                        CueListIntent.LoadSubtitle(
-                            cueListViewModel.subtitle.copy(
-                                format = SubtitleFormat.of(pos)
-                            )
-                        )
-                    )
+                ) { pos, _ ->
+                    cueListViewModel.setSubtitleFormat(SubtitleFormat.of(pos))
+                    sourceViewModel.setSubtitleFormat(SubtitleFormat.of(pos))
                 }
             }
 
             R.id.menu_subtitle_go_to_source_view -> {
-                binding.fragmentSourceView.isVisible = !binding.fragmentSourceView.isVisible
+                val isSourceVisible = binding.fragmentSourceView.isVisible
+                binding.fragmentSourceView.isVisible = !isSourceVisible
+                binding.fragmentSourceView.getFragment<SourceViewFragment>()
+                    .onVisibilityToggle(!isSourceVisible)
+                if (!isSourceVisible) {
+                    sourceViewModel.updateSubtitle(
+                        Subtitle(
+                            name = cueListViewModel.subtitleName,
+                            format = cueListViewModel.subtitleFormat,
+                            data = SubtitleData(
+                                cues = cueListViewModel.cues.value!!,
+                                extras = cueListViewModel.subtitleExtras
+                            )
+                        )
+                    )
+
+                }
+
             }
 
             R.id.menu_settings -> startActivity(Intent(this, SettingsActivity::class.java))
@@ -169,35 +170,6 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
         }
     }
 
-
-    private fun observeViewModel() {
-        videoPlayerViewModel.playerPosition.observe(this) { position ->
-            cueListViewModel.updatePlayerPosition(position)
-        }
-
-        cueListViewModel.customUiEvent.flowWithLifecycle(lifecycle).onEach { event ->
-            when (event) {
-                is CueListUiEvent.PlayerUpdateSubtitle -> videoPlayerViewModel.setSubtitle(event.subtitle)
-
-                is CueListUiEvent.UpdateSourceView -> sourceTextViewModel.doIntent(
-                    SourceViewIntent.LoadSubtitle(
-                        event.subtitle
-                    )
-                )
-
-                is CueListUiEvent.PlayerPause -> videoPlayerViewModel.doEvent(
-                    VideoPlayerIntent.Pause
-                )
-
-                is CueListUiEvent.PlayerSeekTo -> videoPlayerViewModel.doEvent(
-                    VideoPlayerIntent.SeekTo(event.position)
-                )
-
-                else -> Unit
-            }
-        }.launchIn(lifecycleScope)
-    }
-
     private suspend fun readSubtitle(uri: Uri) {
         try {
             val fileName = getFileName(uri)
@@ -211,14 +183,13 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
                     return
                 }
 
-                cueListViewModel.doIntent(
-                    CueListIntent.LoadSubtitle(
-                        Subtitle(
-                            name = fileName.substringBeforeLast("."),
-                            format = subtitleFormat,
-                            data = parseResult.data
-                        )
-                    )
+
+
+                cueListViewModel.loadSubtitle(
+                    name = fileName.substringBeforeLast("."),
+                    format = subtitleFormat,
+                    cues = parseResult.data.cues,
+                    extras = parseResult.data.extras
                 )
             }
         } catch (e: Exception) {
@@ -228,20 +199,21 @@ class EditorActivity : BaseEdgeToEdgeActivity(), OnSharedPreferenceChangeListene
 
     private fun saveSubtitleFile(uri: Uri) {
         scope.launch(Dispatchers.IO) {
-            val content = cueListViewModel.subtitle.toText()
+            val subtitle = Subtitle(
+                name = cueListViewModel.subtitleName,
+                format = cueListViewModel.subtitleFormat,
+                data = SubtitleData(
+                    cues = cueListViewModel.cues.value!!,
+                    extras = cueListViewModel.subtitleExtras
+                )
+            )
+            val content = subtitle.toText()
             val success = writeFile(uri, content)
 
             if (success) {
                 val fileName = getFileName(uri)
-
                 if (fileName != null) {
-                    cueListViewModel.doIntent(
-                        CueListIntent.LoadSubtitle(
-                            cueListViewModel.subtitle.copy(
-                                name = fileName.substringBeforeLast(".")
-                            )
-                        )
-                    )
+                    cueListViewModel.setSubtitleName(fileName.substringBeforeLast("."))
                 }
             }
 

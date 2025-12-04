@@ -15,21 +15,20 @@
 
 package com.teixeira0x.subtypo.ui.videoplayer.util
 
+import androidx.annotation.OptIn
 import androidx.core.text.HtmlCompat
-import com.teixeira0x.subtypo.core.subtitle.format.SubRipFormat
-import com.teixeira0x.subtypo.core.subtitle.model.Subtitle
+import androidx.media3.common.util.UnstableApi
+import com.teixeira0x.subtypo.core.subtitle.model.Cue
 import com.teixeira0x.subtypo.ui.videoplayer.model.ExoCuesTimed
 import androidx.media3.common.text.Cue as ExoCue
 
 object SubtitleUtils {
 
-    suspend fun getExoCuesTimed(subtitle: Subtitle?): List<ExoCuesTimed>? {
-        if (subtitle == null || subtitle.data.cues.isEmpty()) {
+    @OptIn(UnstableApi::class)
+    suspend fun getExoCuesTimed(cues: List<Cue>?): List<ExoCuesTimed>? {
+        if (cues == null || cues.isEmpty()) {
             return null
         }
-
-        val subtitleFormat = subtitle.format
-        val cues = subtitle.data.cues
 
         val groupedCues = cues.groupBy { it.startTime to it.endTime }
 
@@ -38,13 +37,7 @@ object SubtitleUtils {
 
             val exoCues =
                 cuesGroup.map { cue ->
-                    val text =
-                        when (subtitleFormat) {
-                            is SubRipFormat ->
-                                HtmlCompat.fromHtml(cue.text, HtmlCompat.FROM_HTML_MODE_LEGACY)
-
-                            else -> cue.text
-                        }
+                    val text = HtmlCompat.fromHtml(cue.text, HtmlCompat.FROM_HTML_MODE_LEGACY)
                     ExoCue.Builder().setText(text).build()
                 }
 
