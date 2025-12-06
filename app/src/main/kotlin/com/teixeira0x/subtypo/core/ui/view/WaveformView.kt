@@ -4,6 +4,7 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.graphics.Path
 import android.util.AttributeSet
 import android.view.View
 import com.teixeira0x.subtypo.core.subtitle.model.Cue
@@ -124,6 +125,16 @@ class WaveformView @JvmOverloads constructor(
         val x = ((playheadMs - viewStartMs).toFloat() / (viewEndMs - viewStartMs)) * width
 
         canvas.drawLine(x, 0f, x, height.toFloat(), playheadPaint)
+        val size = 8f
+        val path = Path().apply {
+            moveTo(x - size, 0f)
+            lineTo(x + size, 0f)
+            moveTo(x, size)
+            lineTo(x - size, 0f)
+            lineTo(x + size, 0f)
+            close()
+        }
+        canvas.drawPath(path, playheadPaint)
     }
 
     private fun formatMs(ms: Long): String {

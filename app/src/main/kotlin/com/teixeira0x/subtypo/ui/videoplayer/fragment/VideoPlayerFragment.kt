@@ -243,8 +243,6 @@ class VideoPlayerFragment : Fragment() {
                 showingExoCues.addAll(exoCuesTimed.exoCues)
             }
         }
-
-        binding.timelineView.setSubtitles(cueListViewModel.cues.value!!)
         binding.playerView.subtitleView?.setCues(showingExoCues)
         updateTimeline()
 
@@ -265,9 +263,6 @@ class VideoPlayerFragment : Fragment() {
         } else {
             binding.tvTime.text =
                 "${currentPosition.getFormattedTime()}|${duration.getFormattedTime()}"
-
-            binding.timelineView.setDuration(duration)
-            binding.timelineView.setPosition(currentPosition)
 
             // no update loop do player (ex: updateProgress)
             val pos = player.currentPosition
