@@ -62,8 +62,6 @@ android {
         viewBinding = true
         buildConfig = true
     }
-
-    aboutLibraries { excludeFields = arrayOf("generated") }
 }
 
 dependencies {

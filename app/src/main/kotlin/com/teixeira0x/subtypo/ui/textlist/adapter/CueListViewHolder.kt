@@ -15,6 +15,7 @@
 
 package com.teixeira0x.subtypo.ui.textlist.adapter
 
+import android.R.attr.colorError
 import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.TextPaint
@@ -26,7 +27,6 @@ import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.R
 import com.google.android.material.color.MaterialColors
 import com.teixeira0x.subtypo.R.color
 import com.teixeira0x.subtypo.R.string
@@ -57,9 +57,7 @@ class CueListViewHolder(
     }
 
     private fun getTimeTextSpan(
-        previousCue: Cue?,
-        cue: Cue,
-        nextCue: Cue?
+        previousCue: Cue?, cue: Cue, nextCue: Cue?
     ): SpannableStringBuilder {
         val builder = SpannableStringBuilder()
 
@@ -96,25 +94,17 @@ class CueListViewHolder(
         return builder
     }
 
-    fun SpannableStringBuilder.createOverlapSpan(
-        previousCue: Cue?,
-        cue: Cue,
-        nextCue: Cue?,
-        startTimeEndIndex: Int,
-        endTimeEndIndex: Int
+    private fun SpannableStringBuilder.createOverlapSpan(
+        previousCue: Cue?, cue: Cue, nextCue: Cue?, startTimeEndIndex: Int, endTimeEndIndex: Int
     ) {
         if (previousCue != null) {
             if (cue.startTime < previousCue.endTime) {
                 setSpan(
                     ForegroundColorSpan(
                         MaterialColors.getColor(
-                            binding.tvTime,
-                            R.attr.colorError
+                            binding.tvTime, colorError
                         )
-                    ),
-                    0,
-                    startTimeEndIndex,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    ), 0, startTimeEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 append(" ")
                 val start = length
@@ -124,10 +114,7 @@ class CueListViewHolder(
                 setSpan(
                     ForegroundColorSpan(
                         ContextCompat.getColor(binding.root.context, color.yellow)
-                    ),
-                    start,
-                    start + text.length,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    ), start, start + text.length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
                 setSpan(
                     RelativeSizeSpan(0.8f),
@@ -145,13 +132,9 @@ class CueListViewHolder(
                 setSpan(
                     ForegroundColorSpan(
                         MaterialColors.getColor(
-                            binding.tvTime,
-                            R.attr.colorError
+                            binding.tvTime, colorError
                         )
-                    ),
-                    startTimeEndIndex + 1,
-                    endTimeEndIndex,
-                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                    ), startTimeEndIndex + 1, endTimeEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
                 )
             }
         }

@@ -1,5 +1,6 @@
 package com.teixeira0x.subtypo.core.ui.view
 
+import android.R.attr.colorPrimary
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -8,6 +9,7 @@ import android.graphics.RectF
 import android.util.AttributeSet
 import android.view.View
 import android.widget.Scroller
+import androidx.core.R
 import com.google.android.material.color.MaterialColors
 import com.teixeira0x.subtypo.core.subtitle.model.Cue
 
@@ -98,11 +100,14 @@ class TimelineView @JvmOverloads constructor(
     // DRAW PLAYHEAD (always centered)
     // ---------------------------------------------------
     private fun drawPlayhead(canvas: Canvas) {
+        if (durationMs <= 0) return
+
         val width = canvas.width
         val height = canvas.height
 
+
         val colorControlNormal =
-            MaterialColors.getColor(this, com.google.android.material.R.attr.colorControlNormal)
+            MaterialColors.getColor(this, colorPrimary)
 
         paint.color = colorControlNormal
 

@@ -42,9 +42,15 @@ import com.teixeira0x.subtypo.ui.videopicker.fragment.VideoPickerSheetFragment
 import com.teixeira0x.subtypo.ui.videoplayer.mvi.VideoPlayerUiEvent
 import com.teixeira0x.subtypo.ui.videoplayer.util.PlayerErrorMessageProvider
 import com.teixeira0x.subtypo.ui.videoplayer.viewmodel.VideoPlayerViewModel
+import com.teixeira0x.subtypo.ui.videoplayer.waveform.WaveformCache
+import com.teixeira0x.subtypo.ui.videoplayer.waveform.generateWaveformCache
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import java.io.File
 import androidx.media3.common.text.Cue as ExoCue
 
 @OptIn(UnstableApi::class)
@@ -114,10 +120,8 @@ class VideoPlayerFragment : Fragment() {
         storagePermReq?.requestPermissions {
             VideoPickerSheetFragment.newSingleChoice { video ->
                 if (video.corrupted) {
-                    MaterialAlertDialogBuilder(requireContext())
-                        .setMessage(R.string.video_player_corrupted_file)
-                        .setPositiveButton(R.string.ok) { _, _ -> }
-                        .show()
+                    MaterialAlertDialogBuilder(requireContext()).setMessage(R.string.video_player_corrupted_file)
+                        .setPositiveButton(R.string.ok) { _, _ -> }.show()
                     return@newSingleChoice
                 }
                 viewModel.loadVideo(video.path)
@@ -143,23 +147,21 @@ class VideoPlayerFragment : Fragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.customUiEvent
-            .flowWithLifecycle(viewLifecycleOwner.lifecycle)
-            .onEach { event ->
-                when (event) {
-                    is VideoPlayerUiEvent.SelectVideo -> selectVideo()
-                    is VideoPlayerUiEvent.LoadUri -> prepareMedia(event.videoUri)
+        viewModel.customUiEvent.flowWithLifecycle(viewLifecycleOwner.lifecycle).onEach { event ->
+            when (event) {
+                is VideoPlayerUiEvent.SelectVideo -> selectVideo()
+                is VideoPlayerUiEvent.LoadUri -> prepareMedia(event.videoUri)
 
-                    is VideoPlayerUiEvent.Visibility -> updatePlayerVisibility(event.visible)
-                    is VideoPlayerUiEvent.SeekTo -> player?.seekTo(event.position)
-                    is VideoPlayerUiEvent.Pause -> pausePlayer()
-                    is VideoPlayerUiEvent.Play -> playPlayer()
-                }
+                is VideoPlayerUiEvent.Visibility -> updatePlayerVisibility(event.visible)
+                is VideoPlayerUiEvent.SeekTo -> player?.seekTo(event.position)
+                is VideoPlayerUiEvent.Pause -> pausePlayer()
+                is VideoPlayerUiEvent.Play -> playPlayer()
             }
-            .launchIn(viewLifecycleOwner.lifecycleScope)
+        }.launchIn(viewLifecycleOwner.lifecycleScope)
 
-        cueListViewModel.cues.observe(this) {
+        cueListViewModel.cues.observe(viewLifecycleOwner) {
             viewModel.setCues(it)
+            binding.waveformView.setCues(it)
             updateProgress()
         }
     }
@@ -189,11 +191,8 @@ class VideoPlayerFragment : Fragment() {
         if (player == null) {
             updateProgressAction = Runnable { updateProgress() }
             _binding?.playerView?.player =
-                ExoPlayer.Builder(requireContext())
-                    .setSeekBackIncrementMs(DEFAULT_SEEK_BACK_MS)
-                    .setSeekForwardIncrementMs(DEFAULT_SEEK_FORWARD_MS)
-                    .build()
-                    .also { player = it }
+                ExoPlayer.Builder(requireContext()).setSeekBackIncrementMs(DEFAULT_SEEK_BACK_MS)
+                    .setSeekForwardIncrementMs(DEFAULT_SEEK_FORWARD_MS).build().also { player = it }
 
             player?.addListener(componentListener!!)
         }
@@ -217,6 +216,8 @@ class VideoPlayerFragment : Fragment() {
                 prepare()
 
                 seekTo(viewModel.playerPosition.value!!)
+
+                if (videoUri.isNotEmpty()) extractWave(videoUri)
             }
         }
     }
@@ -267,6 +268,16 @@ class VideoPlayerFragment : Fragment() {
 
             binding.timelineView.setDuration(duration)
             binding.timelineView.setPosition(currentPosition)
+
+            // no update loop do player (ex: updateProgress)
+            val pos = player.currentPosition
+// mantenha a janela visível centrada ou como preferir
+            val halfWindow = 10_000L // 10s window
+            val start = (pos - halfWindow).coerceAtLeast(0L)
+            val end = (pos + halfWindow).coerceAtMost(binding.waveformView.totalDurationMs)
+            binding.waveformView.setViewWindow(start, end)
+
+            binding.waveformView.setPlayhead(currentPosition)
         }
 
         binding.seekBar.setMax(duration.toInt())
@@ -288,20 +299,17 @@ class VideoPlayerFragment : Fragment() {
         }
 
         showOptionListDialog(
-            requireContext(),
-            getString(R.string.player_playback_speed),
-            playbackSpeedOptions
+            requireContext(), getString(R.string.player_playback_speed), playbackSpeedOptions
         ) { pos, item ->
             player?.setPlaybackSpeed(PLAYBACK_SPEEDS[pos])
         }
     }
 
-    inner class ComponentListener :
-        Player.Listener, SeekBar.OnSeekBarChangeListener, View.OnClickListener {
+    inner class ComponentListener : Player.Listener, SeekBar.OnSeekBarChangeListener,
+        View.OnClickListener {
 
         override fun onEvents(player: Player, events: Events) {
-            if (
-                events.containsAny(
+            if (events.containsAny(
                     EVENT_PLAYBACK_STATE_CHANGED,
                     EVENT_PLAY_WHEN_READY_CHANGED,
                     EVENT_IS_PLAYING_CHANGED,
@@ -311,8 +319,7 @@ class VideoPlayerFragment : Fragment() {
                 updateProgress()
             }
 
-            if (
-                events.containsAny(
+            if (events.containsAny(
                     EVENT_POSITION_DISCONTINUITY,
                     EVENT_TIMELINE_CHANGED,
                     EVENT_AVAILABLE_COMMANDS_CHANGED,
@@ -351,8 +358,9 @@ class VideoPlayerFragment : Fragment() {
 
         override fun onClick(view: View) {
             when (view.id) {
-                binding.tvTime.id ->
-                    ClipboardUtils.copyText(binding.tvTime.text.toString().substringBeforeLast("|"))
+                binding.tvTime.id -> ClipboardUtils.copyText(
+                    binding.tvTime.text.toString().substringBeforeLast("|")
+                )
 
                 binding.imgSkipBackward.id -> player?.seekBack()
                 binding.imgPlay.id -> {
@@ -363,10 +371,28 @@ class VideoPlayerFragment : Fragment() {
 
                 binding.imgSkipForward.id -> player?.seekForward()
 
-                binding.imgPlayerVisibility.id ->
-                    viewModel.setPlayerVisibility(!viewModel.isPlayerVisible)
+                binding.imgPlayerVisibility.id -> viewModel.setPlayerVisibility(!viewModel.isPlayerVisible)
 
                 binding.imgPlaybackSpeed.id -> showPlaybackSpeedMenu()
+            }
+        }
+    }
+
+    private fun extractWave(videoPath: String) {
+        // 1) gerar cache (uma vez por arquivo)
+        lifecycleScope.launch(Dispatchers.IO) {
+            val wavesFolder = File(requireContext().getExternalFilesDir("waves")!!.absolutePath)
+            wavesFolder.mkdirs()
+            val cacheFile = File(wavesFolder, "${videoPath.substringAfterLast("/")}.wave")
+            val meta = generateWaveformCache(videoPath, cacheFile, windowMs = 20)
+            withContext(Dispatchers.Main) {
+                val cache = WaveformCache(cacheFile)
+                cache.open()
+                binding.waveformView.cache = cache
+                binding.waveformView.meta = meta
+                binding.waveformView.totalDurationMs = meta.durationMs
+
+                binding.waveformView.setViewWindow(0L, meta.durationMs)
             }
         }
     }

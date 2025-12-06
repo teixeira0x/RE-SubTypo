@@ -126,6 +126,11 @@
                 android:layout_height="20dp"
                 android:layout_below="@id/ll_timeline" />
 
+            <com.teixeira0x.subtypo.core.ui.view.WaveformView
+                android:id="@+id/waveform_view"
+                android:layout_width="wrap_content"
+                android:layout_height="40dp"
+                android:layout_below="@id/timeline_view" />
         </RelativeLayout>
     </RelativeLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -15,6 +15,8 @@
 
 package com.teixeira0x.subtypo.ui.videopicker.fragment
 
+import android.R.attr.colorControlNormal
+import android.R.attr.colorPrimary
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.os.Bundle
@@ -27,7 +29,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
-import com.google.android.material.R.attr
 import com.google.android.material.chip.Chip
 import com.google.android.material.color.MaterialColors
 import com.teixeira0x.subtypo.R
@@ -206,7 +207,7 @@ class VideoPickerSheetFragment : BaseBottomSheetFragment() {
             ColorStateList.valueOf(
                 MaterialColors.getColor(
                     binding.imgToggleSort,
-                    if (videoListSortByName) attr.colorPrimary else attr.colorControlNormal,
+                    if (videoListSortByName) colorPrimary else colorControlNormal,
                 )
             )
     }

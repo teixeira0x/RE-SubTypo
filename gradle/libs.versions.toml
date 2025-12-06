@@ -1,18 +1,18 @@
 [versions]
 
-lifecycle-version = "2.8.7"
+lifecycle-version = "2.10.0"
 exoplayer-version = "1.8.0"
-androidx-recyclerview-selection = "1.1.0"
-google-material = "1.12.0"
-google-gson = "2.10.1"
-google-dagger-hilt = "2.53.1"
-google-ksp = "2.0.21-1.0.27"
-kotlin-coroutines = "1.8.1"
-util-aboutlibraries = "11.2.3"
+androidx-recyclerview-selection = "1.2.0"
+google-material = "1.13.0"
+google-gson = "2.13.2"
+google-dagger-hilt = "2.57.2"
+google-ksp = "2.2.10-2.0.2"
+kotlin-coroutines = "1.10.2"
+util-aboutlibraries = "13.1.0"
 tests-junit = "4.13.2"
 
 android-plugin  = "8.13.1"
-kotlin-plugin = "2.0.21"
+kotlin-plugin = "2.2.10"
 
 [libraries]
 
@@ -20,11 +20,11 @@ kotlin-plugin = "2.0.21"
 android-gradle = { module = "com.android.tools.build:gradle", version.ref = "android-plugin" }
 
 # AndroidX
-androidx-annotation = { module = "androidx.annotation:annotation", version = "1.8.2" }
-androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.0" }
-androidx-core = { module = "androidx.core:core", version = "1.13.1" }
-androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.13.1" }
-androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version = "1.8.5" }
+androidx-annotation = { module = "androidx.annotation:annotation", version = "1.9.1" }
+androidx-appcompat = { module = "androidx.appcompat:appcompat", version = "1.7.1" }
+androidx-core = { module = "androidx.core:core", version = "1.17.0" }
+androidx-core-ktx = { module = "androidx.core:core-ktx", version = "1.17.0" }
+androidx-fragment-ktx = { module = "androidx.fragment:fragment-ktx", version = "1.8.9" }
 androidx-lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "lifecycle-version" }
 androidx-lifecycle-viewmodel = { module = "androidx.lifecycle:lifecycle-viewmodel-ktx", version.ref = "lifecycle-version" }
 androidx-preference = { module = "androidx.preference:preference", version = "1.2.1" }
@@ -45,7 +45,7 @@ util-utilcode = { module = "com.blankj:utilcodex", version = "1.31.1" }
 util-leakcanary = { module = "com.squareup.leakcanary:leakcanary-android", version = "2.14" }
 util-aboutlibraries = { module = "com.mikepenz:aboutlibraries", version.ref = "util-aboutlibraries" }
 util-aboutlibraries-core = { module = "com.mikepenz:aboutlibraries-core", version.ref = "util-aboutlibraries" }
-util-glide = { module = "com.github.bumptech.glide:glide", version = "4.16.0" }
+util-glide = { module = "com.github.bumptech.glide:glide", version = "5.0.5" }
 # Kotlin
 kotlin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-plugin" }
 kotlin-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-core", version.ref = "kotlin-coroutines" }
