@@ -1,5 +1,7 @@
 package com.teixeira0x.subtypo.core.subtitle.util
 
+import java.util.Locale
+
 object TimeUtils {
     const val TIME_UNIT_HOUR = 3600000
     const val TIME_UNIT_MINUTE = 60000
@@ -20,14 +22,51 @@ object TimeUtils {
         return when (format) {
             "h:mm:ss.cs" -> {
                 val centis = millis / 10
-                String.format("%d:%02d:%02d.%02d", hours, minutes, seconds, centis)
+                String.format(
+                    Locale.getDefault(),
+                    "%d:%02d:%02d.%02d",
+                    hours,
+                    minutes,
+                    seconds,
+                    centis
+                )
             }
 
-            "hh:mm:ss,SSS" -> String.format("%02d:%02d:%02d,%03d", hours, minutes, seconds, millis)
-            "hh:mm:ss.SSS" -> String.format("%02d:%02d:%02d.%03d", hours, minutes, seconds, millis)
-            "mm:ss.SS" -> String.format("%02d:%02d.%02d", minutes, seconds, millis / 10)
-            "hh:mm:ss" -> String.format("%02d:%02d:%02d", hours, minutes, seconds)
-            "mm:ss" -> String.format("%02d:%02d", minutes, seconds)
+            "hh:mm:ss,SSS" -> String.format(
+                Locale.getDefault(),
+                "%02d:%02d:%02d,%03d",
+                hours,
+                minutes,
+                seconds,
+                millis
+            )
+
+            "hh:mm:ss.SSS" -> String.format(
+                Locale.getDefault(),
+                "%02d:%02d:%02d.%03d",
+                hours,
+                minutes,
+                seconds,
+                millis
+            )
+
+            "mm:ss.SS" -> String.format(
+                Locale.getDefault(),
+                "%02d:%02d.%02d",
+                minutes,
+                seconds,
+                millis / 10
+            )
+
+            "hh:mm:ss" -> String.format(
+                Locale.getDefault(),
+                "%02d:%02d:%02d",
+                hours,
+                minutes,
+                seconds
+            )
+
+            "mm:ss" -> String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
 
             else -> throw IllegalArgumentException("Unsupported format: $format")
         }

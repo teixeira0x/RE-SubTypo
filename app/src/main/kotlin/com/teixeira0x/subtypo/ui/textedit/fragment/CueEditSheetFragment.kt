@@ -25,6 +25,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.teixeira0x.subtypo.R
 import com.teixeira0x.subtypo.core.subtitle.model.Cue
@@ -273,6 +274,8 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
     }
 
     private fun configureTextWatchers() {
+        binding.tieStartTime.addTimeMask()
+        binding.tieEndTime.addTimeMask()
         binding.tieStartTime.doAfterTextChanged { text ->
             viewModel.doIntent(
                 CueEditIntent.ValidateCueField(
@@ -294,6 +297,44 @@ class CueEditSheetFragment : BaseBottomSheetFragment() {
             )
         }
     }
+
+    private fun TextInputEditText.addTimeMask() {
+        var formatting = false
+
+        this.doAfterTextChanged { editable ->
+            if (formatting) {
+                return@doAfterTextChanged
+            }
+
+            val originalText = editable.toString()
+            val digits = originalText.filter { it.isDigit() }
+
+            if (digits.isEmpty()) {
+                if (originalText.isNotEmpty()) {
+                    formatting = true
+                    editable?.clear()
+                    formatting = false
+                }
+                return@doAfterTextChanged
+            }
+
+            val limitedDigits = digits.takeLast(9)
+            val padded = limitedDigits.padStart(9, '0')
+            val formatted = "${padded.substring(0, 2)}:${padded.substring(2, 4)}:${
+                padded.substring(
+                    4,
+                    6
+                )
+            },${padded.substring(6, 9)}"
+
+            if (originalText != formatted) {
+                formatting = true
+                editable?.replace(0, originalText.length, formatted)
+                formatting = false
+            }
+        }
+    }
+
 
     private fun onTimeShortcutClick(isIncrease: Boolean) {
         val focusedField =
