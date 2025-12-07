@@ -57,26 +57,6 @@
 
 
                 <ImageView
-                    android:id="@+id/img_player_visibility"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/description_player_visibility"
-                    android:padding="@dimen/padding_small"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_video_off" />
-
-                <ImageView
-                    android:id="@+id/img_playback_speed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/selectableItemBackgroundBorderless"
-                    android:contentDescription="@string/player_playback_speed"
-                    android:padding="@dimen/padding_small"
-                    android:scaleType="fitCenter"
-                    android:src="@drawable/ic_speedometer" />
-
-                <ImageView
                     android:id="@+id/img_skip_backward"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -106,6 +86,27 @@
                     android:padding="@dimen/padding_small"
                     android:scaleType="fitCenter"
                     android:src="@drawable/ic_skip_forward" />
+
+
+                <ImageView
+                    android:id="@+id/img_player_visibility"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/description_player_visibility"
+                    android:padding="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_video_off" />
+
+                <ImageView
+                    android:id="@+id/img_playback_speed"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    android:contentDescription="@string/player_playback_speed"
+                    android:padding="@dimen/padding_small"
+                    android:scaleType="fitCenter"
+                    android:src="@drawable/ic_speedometer" />
 
                 <TextView
                     android:id="@+id/tv_time"

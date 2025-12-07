@@ -13,6 +13,8 @@ tests-junit = "4.13.2"
 
 android-plugin  = "8.13.1"
 kotlin-plugin = "2.2.10"
+junit = "1.1.5"
+espresso-core = "3.5.1"
 
 [libraries]
 
@@ -53,6 +55,8 @@ kotlin-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines
 
 # Tests
 tests-junit = { module = "junit:junit", version.ref = "tests-junit" }
+androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espresso-core" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "android-plugin" }

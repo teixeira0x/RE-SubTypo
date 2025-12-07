@@ -13,7 +13,14 @@
 - **Video Support**: Edit subtitles synced with your video.
 - **Standalone Editing**: Work on subtitles without requiring a video.
 - **Import/Export**: Seamlessly import and export subtitle files.
-- **Subtitle Formats**: LRC, SRT.
+- **Subtitle Formats**:
+
+- [X] Advanced SubStation Alpha (.ass)
+- [X] SubRip (.srt)
+- [X] LRC Lyrics (.lrc)
+- [X] WebVTT (.vtt)
+- [ ] Timed Text Markup Language (.ttml)
+
 - **Material You Design**: Customizable and visually appealing interface.
 
 ## 🤝 How to Contribute
